@@ -2,15 +2,15 @@
 
 ## Group Members:
 
-names here.(CHANGE THIS!!!!!)
+Tanzeem Hasan, Stanley Huang, Jacob Lukose
        
 # Intentions:
 
-A statement of the problem you are solving and/or a high level description of the project. (CHANGE THIS!!!!!)
+With this project, we will recreate the same Enigma machime that was used in World War II.
     
 # Intended usage:
 
-A description as to how the project will be used (describe the user interface). (CHANGE THIS!!!!!)
+Enter in a string and the program will produce the encrypted version of it.
   
 # Technical Details:
 
