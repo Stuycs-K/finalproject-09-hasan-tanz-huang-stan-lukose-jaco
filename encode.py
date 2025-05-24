@@ -1,12 +1,21 @@
 def index(char):
-    return (ord(char) - ord('A')) % 26
+    if not isinstance(char, int):
+        return (ord(char) - ord('A')) % 26
+    else:
+        return char
 def find_integer(integer, array):
+    integer = mod26(integer)
     for index, i in enumerate(array):
-        print(str(i) + " and " + str(chr(ord('A') + integer)))
+        #print(str(i) + " and " + str(chr(ord('A') + integer)))
         if (integer == i):
             return index
     print("you're dumb")
     return(-1)
+def mod26(integer):
+    if (integer >= 0):
+        return integer % 26
+    else:
+        return integer + 26
 def encode(char, plugboard, rotors):
     #setup
     rotors[0] = index(rotors[0])
@@ -27,22 +36,27 @@ def encode(char, plugboard, rotors):
         reflector.append(index(reflect[i]))
     #going forward
     char = index(char)
-    char += r2[(char + rotors[2]) % 26] - rotors[2]
+    char = (r2[(char + rotors[2]) % 26] - rotors[2])
     char %= 26
     char = r1[(char + rotors[1]) % 26] - rotors[1]
     char %= 26
     char = r0[(char + rotors[0]) % 26] - rotors[0]
     char %= 26
-    print(chr(char + ord('A')))
     #reflect
     char = reflector[char]
-    print(chr(char + ord('A')))
     #going backward
-    char = find_integer(char + rotors[0], r0) - rotors[0]
-    char = find_integer(char + rotors[1], r1) - rotors[1]
-    print("char is after r1 " + str(char))
-    char = find_integer(char + rotors[2], r2) - rotors[2]
+    char = mod26(find_integer(char + rotors[0], r0) - rotors[0])
+    char = mod26(find_integer(char + rotors[1], r1) - rotors[1])
+    #print("char is after r1 " + str(char))
+    char = mod26(find_integer(char + rotors[2], r2) - rotors[2])
 
     print(chr(char + ord('A')))
 
-encode('A', [], ['B', 'C', 'H'])
+def enigma(plugboard, rotors):
+    string = input("Input: ")
+    rotors[0] = index(rotors[0])
+    rotors[1] = index(rotors[1])
+    rotors[2] = index(rotors[2])
+    for i in range(len(string)):
+        encode(string[i], [], rotors)
+enigma([], ['B', 'B', 'B'])
