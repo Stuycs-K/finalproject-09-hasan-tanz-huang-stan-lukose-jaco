@@ -4,7 +4,7 @@ This document must be updated daily every time you finish a work session.
 
 ## Stanley Huang
 
-### 2025-05-19 - File Setup
+### 2025-05-16 - File Setup
 
 Created all of the DEVLOGs, updated the README and the PROPOSAL (20 minutes)
 

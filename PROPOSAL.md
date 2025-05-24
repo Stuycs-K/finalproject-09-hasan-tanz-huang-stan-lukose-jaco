@@ -9,7 +9,9 @@ Tanzeem Hasan, Stanley Huang, Jacob Lukose
 With this project, we will recreate the same Enigma machine that was used in World War II.
 - Enigma encryption
 - Enigma decryption
-- Create our own version of enigma? GigEnigma. This one might incorporate more than the 26 letters of the alphabet.
+- Create our own version of enigma? GigEnigma. This one might incorporate more than the 26 letters of the alphabet. Oh, we can try using spanish.
+- Visualize process using processing
+
 # Intended usage:
 
 Enter in a string and the program will produce the encrypted version of it. Enter a string encrypted by the enigma machine, and the program will produce the decrypted version.

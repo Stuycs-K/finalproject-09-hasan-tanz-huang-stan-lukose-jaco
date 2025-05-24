@@ -7,6 +7,14 @@ Tanzeem Hasan, Stanley Huang, Jacob Lukose
 
 ### Project Description:
 This project will simulate the Enigma machine used in World War II.
+With this project, we will recreate the same Enigma machine that was used in World War II.
+- Enigma encryption
+- Enigma decryption
+<!-- - Create our own version of enigma? GigEnigma. This one might incorporate more than the 26 letters of the alphabet. Oh, we can try using spanish. (Low priority)-->
+- Visualize process using processing
+  - Letters moving along wires
+  - Input letter -> rotor -> output letter, repeat
+
 
 ### Instructions:
 
