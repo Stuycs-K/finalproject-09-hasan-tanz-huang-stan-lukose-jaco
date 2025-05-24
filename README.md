@@ -23,4 +23,6 @@ How does the user interact with this program? (CHANGE THIS!!!!!)
 
 ### Resources/ References:
 
-list here(CHANGE THIS!!!!!)
+https://www.101computing.net/enigma-machine-emulator/
+https://brilliant.org/wiki/enigma-machine/
+https://www.cryptomuseum.com/crypto/enigma/wiring.htm

@@ -27,8 +27,11 @@ def encode(char, plugboard, rotors):
             r[i][j] = index(r[i][j])
     for i in range(len(reflect)):
         reflector.append(index(reflect[i]))
-    #going forward
     char = index(char)
+    #plugboard
+    char = pb(char, plugboard)
+    #print("char is now " + str(char))
+    #going forward
     for i in range(len(r) - 1, -1, -1):
         char = r[i][(char + rotors[i]) % 26] - rotors[i]
         char %= 26
@@ -37,8 +40,19 @@ def encode(char, plugboard, rotors):
     #going backward
     for i in range(len(r)):
         char = mod26(find_integer(char + rotors[i], r[i]) - rotors[i])
-
+    #plugboard again
+    char = pb(char, plugboard)
     print(chr(char + ord('A')), end = "")
+
+def pb(char, plugboard):
+    for i in plugboard:
+        #print("length is " + str(len(i)))
+        for j in range(len(i)):
+            #print(str(i[j]) + " and " + str(char))
+            if (i[j] == char):
+                return i[len(i) - j - 1]
+    return char
+
 
 def update(rotors):
     if (rotors[2] == index('V')):
@@ -49,11 +63,14 @@ def update(rotors):
 
 def enigma(plugboard, rotors):
     string = input("Input: \n")
+    for i in range(len(plugboard)):
+        for j in range(len(plugboard[i])):
+            plugboard[i][j] = index(plugboard[i][j])
     for i in range(len(rotors)):
         rotors[i] = index(rotors[i])
     for i in range(len(string)):
         if ((ord(string[i]) >= ord('A') and ord(string[i]) <= ord('Z')) or (ord(string[i]) >= ord('a') and ord(string[i]) <= ord('z'))):
             update(rotors)
-            encode(string[i], [], rotors)
+            encode(string[i], plugboard, rotors)
     print("")
-enigma([], ['A', 'A', 'A'])
+enigma([['A', 'Z'], ['B', 'Y'], ['C', 'X'], ['D', 'W'], ['E', 'V'], ['F', 'U'], ['G', 'T'], ['H', 'S'], ['I', 'R'], ['J', 'Q']], ['A', 'A', 'A'])
