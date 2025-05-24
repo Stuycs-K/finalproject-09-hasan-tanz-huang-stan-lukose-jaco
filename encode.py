@@ -52,11 +52,18 @@ def encode(char, plugboard, rotors):
 
     print(chr(char + ord('A')))
 
+def update(rotors):
+    if (rotors[2] == index('V')):
+        rotors[1] = mod26(rotors[1] + 1)
+        if (rotors[1] == index('E')):
+            rotors[0] = mod26(rotors[0] + 1)
+    rotors[2] = mod26(rotors[2] + 1)
 def enigma(plugboard, rotors):
     string = input("Input: ")
     rotors[0] = index(rotors[0])
     rotors[1] = index(rotors[1])
     rotors[2] = index(rotors[2])
     for i in range(len(string)):
+        update(rotors)
         encode(string[i], [], rotors)
-enigma([], ['B', 'B', 'B'])
+enigma([], ['A', 'A', 'A'])
