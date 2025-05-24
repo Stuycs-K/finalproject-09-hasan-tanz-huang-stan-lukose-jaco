@@ -1,5 +1,8 @@
 def index(char):
-    return (ord(char) - ord('A')) % 26
+    if (ord(char) >= ord('a')):
+        return (ord(char) - ord('a')) % 26
+    else:
+        return (ord(char) - ord('A')) % 26
 def find_integer(integer, array):
     integer = mod26(integer)
     for index, i in enumerate(array):
@@ -35,7 +38,7 @@ def encode(char, plugboard, rotors):
     for i in range(len(r)):
         char = mod26(find_integer(char + rotors[i], r[i]) - rotors[i])
 
-    print(chr(char + ord('A')))
+    print(chr(char + ord('A')), end = "")
 
 def update(rotors):
     if (rotors[2] == index('V')):
@@ -45,10 +48,12 @@ def update(rotors):
     rotors[2] = mod26(rotors[2] + 1)
 
 def enigma(plugboard, rotors):
-    string = input("Input: ")
+    string = input("Input: \n")
     for i in range(len(rotors)):
         rotors[i] = index(rotors[i])
     for i in range(len(string)):
-        update(rotors)
-        encode(string[i], [], rotors)
+        if ((ord(string[i]) >= ord('A') and ord(string[i]) <= ord('Z')) or (ord(string[i]) >= ord('a') and ord(string[i]) <= ord('z'))):
+            update(rotors)
+            encode(string[i], [], rotors)
+    print("")
 enigma([], ['A', 'A', 'A'])
