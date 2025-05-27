@@ -99,7 +99,7 @@ def enigma():
         return None
     plugboard = arguments[0]
     rotors = arguments[1]
-    string = "the sky is blue and the grass is green. jokic deserves to win mvp"
+    string = "the sky is blue and the grass is green. jokic deserves to win the most valuable player"
     for i in range(len(plugboard)):
         for j in range(len(plugboard[i])):
             plugboard[i][j] = index(plugboard[i][j])

@@ -46,7 +46,7 @@ def update(rotors):
             rotors[0] = mod26(rotors[0] + 1)
     rotors[2] = mod26(rotors[2] + 1)
 
-string = "OPCNVBPFFPGTBSPWWZTVMILUNNSKXYVTBUUQSJNLUUYMCHOBZEW"
+string = "OPCNVBPFFPGTBSPWWZTVMILUNNSKXYVTBUUQSJNLUUYMCHOBOMZNBHCTOGICAYPKVSEVK"
 
 dictionary = {}
 with open ("words.txt", "r") as file:
@@ -57,17 +57,16 @@ with open ("words.txt", "r") as file:
 def enigma(rotors):
     rotors = [rotors // 26 // 26, (rotors // 26) % 26, rotors % 26]
     answer = ""
-    thing = False
+    thing = 0
     for i in range(len(string)):
         update(rotors)
         answer += encode(string[i], rotors)
         #print(answer)
-        if (i < 4 and thing == False and i > 1):
-            thing = answer in dictionary
-        if (i == 5 and thing == False):
-            return None
+        if (i < 5 and i > 1 and answer in dictionary):
+            thing += 1
     #print(thing)
-    return answer
+    if (thing == 1):
+        return answer
 
 def decode(string):
     for i in range(26 * 26 * 26):
