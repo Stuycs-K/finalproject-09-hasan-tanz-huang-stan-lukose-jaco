@@ -1,32 +1,24 @@
 def index(char):
-    if (ord(char) >= ord('a')):
-        return (ord(char) - ord('a')) % 26
-    else:
-        return (ord(char) - ord('A')) % 26
-def find_integer(integer, array):
-    integer = mod26(integer)
-    for index, i in enumerate(array):
-        #print(str(i) + " and " + str(chr(ord('A') + integer)))
-        if (integer == i):
-            return index
-    print("you're dumb")
-    return(-1)
+    return (ord(char) - ord('A')) % 26
+#setup
+r = ["EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO"]
+findr = [[0] * 26] * 3
+reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT"
+reflector = []
+for i in range(len(r)):
+    r[i] = list(r[i])
+    for j in range(len(r[i])):
+        r[i][j] = index(r[i][j])
+        findr[i][r[i][j]] = j
+for i in range(len(reflect)):
+    reflector.append(index(reflect[i]))
+
+print(r[2])
+print(findr[2])
+
 def mod26(integer):
-    if (integer >= 0):
-        return integer % 26
-    else:
-        return integer + 26
+    return (integer + 26) % 26
 def encode(char, plugboard, rotors):
-    #setup
-    r = ["EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO"]
-    reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT"
-    reflector = []
-    for i in range(len(r)):
-        r[i] = list(r[i])
-        for j in range(len(r[i])):
-            r[i][j] = index(r[i][j])
-    for i in range(len(reflect)):
-        reflector.append(index(reflect[i]))
     char = index(char)
     #plugboard
     char = pb(char, plugboard)
@@ -39,10 +31,10 @@ def encode(char, plugboard, rotors):
     char = reflector[char]
     #going backward
     for i in range(len(r)):
-        char = mod26(find_integer(char + rotors[i], r[i]) - rotors[i])
+        char = mod26(r[i][findr[i][mod26(char + rotors[i])]] - rotors[i])
     #plugboard again
     char = pb(char, plugboard)
-    print(chr(char + ord('A')), end = "")
+    #print(chr(char + ord('A')), end = "")
 
 def pb(char, plugboard):
     for i in plugboard:
@@ -62,7 +54,7 @@ def update(rotors):
     rotors[2] = mod26(rotors[2] + 1)
 
 def enigma(plugboard, rotors):
-    string = input("Input: \n")
+    string = "the sky is blue and the grass is green. jokic deserves to win mvp"
     for i in range(len(plugboard)):
         for j in range(len(plugboard[i])):
             plugboard[i][j] = index(plugboard[i][j])
@@ -71,6 +63,7 @@ def enigma(plugboard, rotors):
     for i in range(len(string)):
         if ((ord(string[i]) >= ord('A') and ord(string[i]) <= ord('Z')) or (ord(string[i]) >= ord('a') and ord(string[i]) <= ord('z'))):
             update(rotors)
-            encode(string[i], plugboard, rotors)
-    print("")
+            encode(string[i].upper(), plugboard, rotors)
+    #print("")
+
 enigma([['A', 'Z'], ['B', 'Y'], ['C', 'X'], ['D', 'W'], ['E', 'V'], ['F', 'U'], ['G', 'T'], ['H', 'S'], ['I', 'R'], ['J', 'Q']], ['A', 'A', 'A'])
