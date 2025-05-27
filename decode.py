@@ -1,4 +1,5 @@
-import sys
+import multiprocessing
+import os
 
 def index(char):
     return (ord(char) - ord('A')) % 26
@@ -39,13 +40,16 @@ def encode(char, rotors):
     return chr(char + ord('A'))
 
 def update(rotors):
-    if (rotors[2] == index('V')):
+    if (rotors[2] == 21):
         rotors[1] = mod26(rotors[1] + 1)
-        if (rotors[1] == index('E')):
+        if (rotors[1] == 4):
             rotors[0] = mod26(rotors[0] + 1)
     rotors[2] = mod26(rotors[2] + 1)
 
-def enigma(string, rotors):
+string = "OPCNVBPFFPGTBSPWWZTVMILUNNSKXYVTBUUQSJNLUUYMCHOBZEW"
+
+def enigma(rotors):
+    rotors = [rotors // 26 // 26, (rotors // 26) % 26, rotors % 26]
     answer = ""
     for i in range(len(string)):
         update(rotors)
@@ -53,9 +57,12 @@ def enigma(string, rotors):
     return answer
 
 def decode(string):
-    for i in range(26):
-        for j in range(26):
-            for k in range(26):
-                enigma(string, [i, j, k])
+    for i in range(26 * 26 * 26):
+        enigma(string, [i // 26 // 26, (i // 26) % 26, i % 26])
 
-decode("OPCNVBPFFPGTBSPWWZTVMILUNNSKXYVTBUUQSJNLUUYMCHOBZEW")
+
+def d():
+    with multiprocessing.Pool(processes=os.cpu_count()) as pool:
+        contents = pool.map(enigma, range(26 * 26 * 26))   
+    return contents
+contents = d()
