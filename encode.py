@@ -15,16 +15,6 @@ for i in range(len(r)):
 for i in range(len(reflect)):
     reflector.append(index(reflect[i]))
 
-print(r[1])
-print(findr[1])
-def find_integer(integer, array):
-    integer = mod26(integer)
-    for index, i in enumerate(array):
-        #print(str(i) + " and " + str(chr(ord('A') + integer)))
-        if (integer == i):
-            return index
-    print("you're dumb")
-    return(-1)
 def mod26(integer):
     return (integer + 26) % 26
 
@@ -50,7 +40,7 @@ def encode(char, plugboard, rotors):
 
     #plugboard again
     char = pb(char, plugboard)
-    print(chr(char + ord('A')), end = "")
+    return chr(char + ord('A'))
 
 def pb(char, plugboard):
     for i in plugboard:
@@ -115,12 +105,10 @@ def enigma():
             plugboard[i][j] = index(plugboard[i][j])
     for i in range(len(rotors)):
         rotors[i] = index(rotors[i])
-    print("plugboard is" + str(plugboard))
-    print("rotors is " + str(rotors))
+    answer = ""
     for i in range(len(string)):
         if ((ord(string[i]) >= ord('A') and ord(string[i]) <= ord('Z')) or (ord(string[i]) >= ord('a') and ord(string[i]) <= ord('z'))):
             update(rotors)
-            encode(string[i].upper(), plugboard, rotors)
-    print("")
-
-enigma()
+            answer += encode(string[i].upper(), plugboard, rotors)
+    return answer
+print(enigma())
