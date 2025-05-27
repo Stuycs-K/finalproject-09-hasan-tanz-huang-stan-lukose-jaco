@@ -1,6 +1,6 @@
 import multiprocessing
 import os
-
+import enchant
 def index(char):
     return (ord(char) - ord('A')) % 26
 #setup
@@ -48,12 +48,25 @@ def update(rotors):
 
 string = "OPCNVBPFFPGTBSPWWZTVMILUNNSKXYVTBUUQSJNLUUYMCHOBZEW"
 
+dictionary = {}
+with open ("words.txt", "r") as file:
+    for i in range(3000):
+        thing = file.readline().strip().upper()
+        dictionary[thing] = 1
+
 def enigma(rotors):
     rotors = [rotors // 26 // 26, (rotors // 26) % 26, rotors % 26]
     answer = ""
+    thing = False
     for i in range(len(string)):
         update(rotors)
         answer += encode(string[i], rotors)
+        #print(answer)
+        if (i < 4 and thing == False and i > 1):
+            thing = answer in dictionary
+        if (i == 5 and thing == False):
+            return None
+    #print(thing)
     return answer
 
 def decode(string):
@@ -66,3 +79,6 @@ def d():
         contents = pool.map(enigma, range(26 * 26 * 26))   
     return contents
 contents = d()
+answer = [thing for thing in contents if thing is not None]
+print(len(answer))
+print(answer)

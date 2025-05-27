@@ -26,3 +26,4 @@ How does the user interact with this program? (CHANGE THIS!!!!!)
 https://www.101computing.net/enigma-machine-emulator/
 https://brilliant.org/wiki/enigma-machine/
 https://www.cryptomuseum.com/crypto/enigma/wiring.htm
+https://docs.python.org/3/library/multiprocessing.html
