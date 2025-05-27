@@ -13,3 +13,6 @@ We did some additional research as to how enigma encryption works and started wo
 
 ### 2025-05-24 - Mechanics of Encode
 Finished the mechanics of encode, including rotors(III, II, I), plugboard, notches, and alphabet filtering. (4 hours)
+
+### 2025-05-26 - Rest of Encode, Most of Decode
+Finished the rest of encode (arguments, speed). Also finished most of decode (the brute forcing). (3 hours)
