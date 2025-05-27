@@ -41,12 +41,12 @@ def encode(char, plugboard, rotors):
         char %= 26
     #reflect
     char = reflector[char]
-    print("char is " + chr(char + ord('A')))
+    #print("char is " + chr(char + ord('A')))
     #going backward
     for i in range(len(r)):
-        print("the mod is" + str(mod26(char + rotors[i])))
-        char = mod26(r[i][findr[i][mod26(char + rotors[i])]] - rotors[i])
-        print("char is " + chr(char + ord('A')))
+        #print("the mod is" + str(mod26(char + rotors[i])))
+        char = mod26(findr[i][mod26(char + rotors[i])] - rotors[i])
+        #print("char is " + chr(char + ord('A')))
 
     #plugboard again
     char = pb(char, plugboard)
@@ -109,7 +109,7 @@ def enigma():
         return None
     plugboard = arguments[0]
     rotors = arguments[1]
-    string = "A"
+    string = "the sky is blue and the grass is green. jokic deserves to win mvp"
     for i in range(len(plugboard)):
         for j in range(len(plugboard[i])):
             plugboard[i][j] = index(plugboard[i][j])
