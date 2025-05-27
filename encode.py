@@ -91,7 +91,7 @@ def parseArgs():
             print("Rotor settings must be 3 consecutive letters")
             return(None)
     return [plugboard, rotors]
-    
+
 
 def enigma():
     arguments = parseArgs()
@@ -99,7 +99,7 @@ def enigma():
         return None
     plugboard = arguments[0]
     rotors = arguments[1]
-    string = "the sky is blue and the grass is green. jokic deserves to win the most valuable player"
+    string = "mines sweeped rake hit rake hit shovel hit"
     for i in range(len(plugboard)):
         for j in range(len(plugboard[i])):
             plugboard[i][j] = index(plugboard[i][j])

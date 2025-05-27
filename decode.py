@@ -46,7 +46,11 @@ def update(rotors):
             rotors[0] = mod26(rotors[0] + 1)
     rotors[2] = mod26(rotors[2] + 1)
 
-string = "OPCNVBPFFPGTBSPWWZTVMILUNNSKXYVTBUUQSJNLUUYMCHOBOMZNBHCTOGICAYPKVSEVK"
+string = "DOOWBXQYWLNUITQNWTGVMHTVXKRAJFUUNUX"
+consonants = ['B', 'C', 'D', 'F', 'G', 'J', 'K', 'M', 'P', 'Q', 'T', 'V', 'X', 'Z']
+fconsonants = ['H', 'L', 'N', 'R', 'W', 'Y']
+
+#def illegal():
 
 dictionary = {}
 with open ("words.txt", "r") as file:
@@ -54,30 +58,39 @@ with open ("words.txt", "r") as file:
         thing = file.readline().strip().upper()
         dictionary[thing] = 1
 
-def enigma(rotors):
-    rotors = [rotors // 26 // 26, (rotors // 26) % 26, rotors % 26]
+def e(rotors):
     answer = ""
     thing = 0
+    check = []
+    rotors1 = rotors.copy()
     for i in range(len(string)):
         update(rotors)
         answer += encode(string[i], rotors)
         #print(answer)
         if (i < 5 and i > 1 and answer in dictionary):
+            check.append(i + 1)
+        if (i in check):
+            if (not (string[i - 1] in consonants and string[i] in consonants) or not(string[i - 1] in fconsonants and string[i] in consonants)):
+                thing += 1
+    for i in range(2, 10):
+        if (answer[max(0, len(string) - 1 - i):] in dictionary):
             thing += 1
+            break
     #print(thing)
-    if (thing == 1):
-        return answer
+    if (thing == 2):
+        return [rotors1, answer]
 
 def decode(string):
     for i in range(26 * 26 * 26):
-        enigma(string, [i // 26 // 26, (i // 26) % 26, i % 26])
+        e(string, [i // 26 // 26, (i // 26) % 26, i % 26])
 
-
+glist = [[i, j, k] for i in range(26) for j in range(26) for k in range(26)]
 def d():
     with multiprocessing.Pool(processes=os.cpu_count()) as pool:
-        contents = pool.map(enigma, range(26 * 26 * 26))   
+        contents = pool.map(e, glist)
     return contents
 contents = d()
 answer = [thing for thing in contents if thing is not None]
-print(len(answer))
-print(answer)
+for i in answer:
+
+    print(str(i[0]) + ": " + str(i[1]))
