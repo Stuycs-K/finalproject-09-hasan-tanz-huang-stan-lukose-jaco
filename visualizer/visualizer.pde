@@ -1,5 +1,5 @@
-String input = "A";
-String output = "B";
+char[] input = new char[1];
+char[] output = new char[1];
 
 void setup() {
   size(800, 600);         // Set window size
@@ -7,13 +7,21 @@ void setup() {
   textAlign(CENTER, CENTER);
   textSize(32);
   
-  drawLetter(input, 200, height/2);
-  drawLetter(output, 600, height/2);
+  drawLetter(input[0], 200, height/2);
+  drawLetter(output[0], 600, height/2);
   drawArrow(240, height/2, 550, height/2);
   
 }
 
-void drawLetter(String letter, float xcor, float ycor) {
+void draw() {
+  if (keyPressed) {
+    input[0] = key;
+  }
+  drawLetter(input[0], 200, height/2);
+  drawLetter(output[0], 600, height/2);
+}
+
+void drawLetter(char letter, float xcor, float ycor) {
   fill(240);
   stroke(0);
   ellipse(xcor, ycor, 80, 80);

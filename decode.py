@@ -1,6 +1,6 @@
 import multiprocessing
 import os
-import enchant
+
 def index(char):
     return (ord(char) - ord('A')) % 26
 #setup
@@ -46,7 +46,7 @@ def update(rotors):
             rotors[0] = mod26(rotors[0] + 1)
     rotors[2] = mod26(rotors[2] + 1)
 
-string = "DOOWBXQYWLNUITQNWTGVMHTVXKRAJFUUNUX"
+string = "AMVYBVRDBBWUWIQGDHVKUSYUUQKFVHSXVUH"
 consonants = ['B', 'C', 'D', 'F', 'G', 'J', 'K', 'M', 'P', 'Q', 'T', 'V', 'X', 'Z']
 fconsonants = ['H', 'L', 'N', 'R', 'W', 'Y']
 
