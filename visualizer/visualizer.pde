@@ -43,8 +43,7 @@ void keyPressed(){
     float x = padding + i*spacing;
     drawLetter(letters[i], x, y, 30);
   }
-  char newChar= (char)((int)rotors.charAt(rotors.length()-1)+1);
-  rotors= rotors.substring(0, rotors.length()-1) + newChar;
+  rotors = update(rotors);
   //println(rotors.length());
 }
 
@@ -85,7 +84,7 @@ char encode(char input, String plugboard, String rotors) {
   for (int i = r.length - 1; i > -1; i--) {
     //println(index(rotors.charAt(i)));
     order = index(r[i].charAt(mod26(order + index(rotors.charAt(i))))) - index(rotors.charAt(i));
-//    mod26(order);
+    order = mod26(order);
     letters[pos] = c(order);
     pos += 1;
     //println((char)((int)('A')+order));
@@ -104,4 +103,18 @@ char encode(char input, String plugboard, String rotors) {
   }//
   letters[pos] = c(order);
   return c(order);
+}
+
+String update(String rotors) {
+  if (rotors.charAt(2) == 'V') {
+    rotors = rotors.substring(0,1) + (char)(c(index(rotors.charAt(1))+1)) + (char)(rotors.charAt(2));
+    print(rotors);
+    if (rotors.charAt(1) == 'E') {
+      rotors = c(index(rotors.charAt(0))+1) + rotors.substring(1);
+      print(rotors);
+    }
+  }
+  rotors = rotors.substring(0,2) + c(index(rotors.charAt(2))+1);
+  print(rotors);
+  return rotors;
 }
