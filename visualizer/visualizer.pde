@@ -1,44 +1,56 @@
 import java.util.ArrayList;
-char[] input = new char[1];
-char[] output = new char[1];
+char[] letters = new char[8];
 String[] r = {"EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO"};
 String reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
 ArrayList<Integer> reflector = new ArrayList<>();
-String rotors="AAC";
+String rotors="AAC"; //Make an area to decide the rotor combination 
 boolean pressed = false;
 // Something about reflector, find out later
 
 void setup() {
-  size(800, 600);         // Set window size
+  size(1000, 600);         // Set window size
   background(255); // Set background color
   textAlign(CENTER, CENTER);
-  textSize(32);
+  textSize(24);
   for (int i = 0; i < reflect.length(); i++){
     reflector.add(index(reflect.charAt(i)));
   }
-  drawLetter(input[0], 200, height/2);
-  drawLetter(output[0], 600, height/2);
-  drawArrow(240, height/2, 550, height/2);
+  
+  // Circle arrow details
+  float padding = 60;
+  float spacing = (width - 2 * padding) / (6);
+  float y = 300;
+  for (int i = 0; i < 7; i++) {
+    float x = padding + i*spacing;
+    drawLetter(letters[i], x, y, 30);
+    if (i < 6) {
+      float x2 = padding + (i+1) * spacing;
+      drawArrow(x+30, y, x2-40, y);
+    }
+  }
+  //drawLetter(letters[0], 200, height/2, 80);
+  //drawLetter(letters[1], 600, height/2, 80);
+  //drawArrow(240, height/2, 550, height/2);
   
 }
 
 void keyPressed(){
-  input[0] = Character.toUpperCase(key);
-  output[0]=encode(input[0], "", rotors);
+  letters[0] = Character.toUpperCase(key);
+  encode(letters[0], "", rotors); //call it directly to set the letters
   char newChar= (char)((int)rotors.charAt(rotors.length()-1)+1);
   rotors= rotors.substring(0, rotors.length()-1) + newChar;
-  println(rotors.length());
+  //println(rotors.length());
 }
 
-void draw() {
-  drawLetter(input[0], 200, height/2);
-  drawLetter(output[0], 600, height/2);
-}
+//void draw() {
+//  //drawLetter(letters[0], 200, height/2);
+//  //drawLetter(letters[1], 600, height/2);
+//}
 
-void drawLetter(char letter, float xcor, float ycor) {
+void drawLetter(char letter, float xcor, float ycor, float radius) {
   fill(240);
   stroke(0);
-  ellipse(xcor, ycor, 80, 80);
+  ellipse(xcor, ycor, 2*radius, 2*radius);
   fill(0);
   text(letter, xcor, ycor);
 }
@@ -60,18 +72,25 @@ int mod26(int num){
 char encode(char input, String plugboard, String rotors) {
   int order = index(input);
   // pb function, ignore plugboard
+  int pos = 1;
   for (int i = r.length - 1; i > -1; i--) {
     //println(index(rotors.charAt(i)));
     order = index(r[i].charAt(mod26(order + index(rotors.charAt(i))))) - index(rotors.charAt(i));
     order %= 26;
+    letters[pos] = (char)(order);
+    pos += 1;
     //println((char)((int)('A')+order));
   }
   order = reflector.get(order);
+  letters[pos] = (char)(order);
+  pos += 1;
   for (int i = 0; i < r.length; i ++){
     //println(index(rotors.charAt(i)));
     //println((char)((order + index(rotors.charAt(i)) + (int)('A'))));
     order=r[i].indexOf((char)((order + index(rotors.charAt(i))) %26 + (int)('A')))-index(rotors.charAt(i));
     order = ((order % 26) + 26) % 26;
+    letters[pos] = (char)(order);
+    pos += 1;
     //println((char)((int)('A')+order));  
   }//
   return (char) (order+(int)('A'));
