@@ -53,8 +53,8 @@ fconsonants = ['H', 'L', 'N', 'R', 'W', 'Y']
 #def illegal():
 
 dictionary = {}
-with open ("words.txt", "r") as file:
-    for i in range(3000):
+with open ("wiki-100k.txt", "r") as file:
+    for i in range(100000):
         thing = file.readline().strip().upper()
         dictionary[thing] = 1
 
@@ -67,30 +67,31 @@ def e(rotors):
         update(rotors)
         answer += encode(string[i], rotors)
         #print(answer)
-        if (i < 5 and i > 1 and answer in dictionary):
+        if (i < 10 and i > 1 and answer in dictionary):
             check.append(i + 1)
         if (i in check):
             if (not (string[i - 1] in consonants and string[i] in consonants) or not(string[i - 1] in fconsonants and string[i] in consonants)):
                 thing += 1
-    for i in range(2, 10):
+    for i in range(2, 15):
         if (answer[max(0, len(string) - 1 - i):] in dictionary):
             thing += 1
             break
     #print(thing)
-    if (thing == 2):
-        return [rotors1, answer]
+    if (thing > 1):
+        return (thing, rotors1, answer)
 
 def decode(string):
     for i in range(26 * 26 * 26):
         e(string, [i // 26 // 26, (i // 26) % 26, i % 26])
 
-glist = [[i, j, k] for i in range(26) for j in range(26) for k in range(26)]
+#glist = [[i, j, k] for i in range(26) for j in range(26) for k in range(26)]
+glist = [[i, j, 0] for i in range(26) for j in range(26)]
 def d():
     with multiprocessing.Pool(processes=os.cpu_count()) as pool:
         contents = pool.map(e, glist)
     return contents
 contents = d()
 answer = [thing for thing in contents if thing is not None]
-for i in answer:
-
-    print(str(i[0]) + ": " + str(i[1]))
+answer = sorted(answer, reverse = True)
+for i in range(min(i, 5)):
+    print(str(answer[i][0]) + ": " + str(answer[i][1]) + ": " + str(answer[i][2]))

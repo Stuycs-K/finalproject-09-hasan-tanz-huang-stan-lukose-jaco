@@ -99,7 +99,7 @@ def enigma():
         return None
     plugboard = arguments[0]
     rotors = arguments[1]
-    string = "mines sweeped rake hit rake hit shovel hit"
+    string = "toasted waffles fly freely"
     for i in range(len(plugboard)):
         for j in range(len(plugboard[i])):
             plugboard[i][j] = index(plugboard[i][j])
