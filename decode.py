@@ -56,7 +56,16 @@ dictionary = {}
 with open ("wiki-100k.txt", "r") as file:
     for i in range(100000):
         thing = file.readline().strip().upper()
-        dictionary[thing] = 1
+        if (len(thing) != 0 and (len(thing) != 1 or thing == "I" or thing == "A")):
+            dictionary[thing] = 1
+
+def numWords(string, start):
+    answer = 0
+    num = len(string)
+    for i in range(start, len(string)):
+        if (string[start:i] in dictionary):
+            answer = answer + numWords(string, i) + 1
+    return answer
 
 def e(rotors):
     answer = ""
@@ -67,25 +76,10 @@ def e(rotors):
         update(rotors)
         answer += encode(string[i], rotors)
         #print(answer)
-        if (i < 10 and i > 1 and answer in dictionary):
-            check.append(i + 1)
-        if (i in check):
-            if (not (string[i - 1] in consonants and string[i] in consonants) or not(string[i - 1] in fconsonants and string[i] in consonants)):
-                thing += 1
-    for i in range(2, 15):
-        if (answer[max(0, len(string) - 1 - i):] in dictionary):
-            thing += 1
-            break
-    #print(thing)
-    if (thing > 1):
-        return (thing, rotors1, answer)
-
-def decode(string):
-    for i in range(26 * 26 * 26):
-        e(string, [i // 26 // 26, (i // 26) % 26, i % 26])
+    return (numWords(answer, 0), answer)
 
 #glist = [[i, j, k] for i in range(26) for j in range(26) for k in range(26)]
-glist = [[i, j, 0] for i in range(26) for j in range(26)]
+glist = [[i, j, k] for i in range(26) for j in range(26) for k in range(26)]
 def d():
     with multiprocessing.Pool(processes=os.cpu_count()) as pool:
         contents = pool.map(e, glist)
@@ -93,5 +87,10 @@ def d():
 contents = d()
 answer = [thing for thing in contents if thing is not None]
 answer = sorted(answer, reverse = True)
-for i in range(min(i, 5)):
-    print(str(answer[i][0]) + ": " + str(answer[i][1]) + ": " + str(answer[i][2]))
+
+with open("test.txt", "r") as files:
+    for i in range(50):
+        string= files.readline()
+        contents = d()
+        contents = sorted(contents, reverse = True)
+        print(contents[0])

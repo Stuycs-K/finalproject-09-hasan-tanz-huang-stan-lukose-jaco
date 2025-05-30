@@ -93,13 +93,12 @@ def parseArgs():
     return [plugboard, rotors]
 
 
-def enigma():
+def enigma(string):
     arguments = parseArgs()
     if (arguments is None):
         return None
     plugboard = arguments[0]
     rotors = arguments[1]
-    string = "toasted waffles fly freely"
     for i in range(len(plugboard)):
         for j in range(len(plugboard[i])):
             plugboard[i][j] = index(plugboard[i][j])
@@ -111,4 +110,8 @@ def enigma():
             update(rotors)
             answer += encode(string[i].upper(), plugboard, rotors)
     return answer
-print(enigma())
+
+with open("sentences.txt", "r") as file:
+    for i in range(50):
+        thing = file.readline()
+        print(enigma(thing))
