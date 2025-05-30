@@ -5,6 +5,8 @@ String reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
 ArrayList<Integer> reflector = new ArrayList<>();
 String rotors="AAC"; //Make an area to decide the rotor combination 
 boolean pressed = false;
+String input = "";
+String output = "";
 // Something about reflector, find out later
 
 void setup() {
@@ -27,10 +29,7 @@ void setup() {
       drawArrow(x+30, y, x2-40, y);
     }
   }
-  //drawLetter(letters[0], 200, height/2, 80);
-  //drawLetter(letters[1], 600, height/2, 80);
-  //drawArrow(240, height/2, 550, height/2);
-  
+  drawIOBoxes(30, 900, 350);
 }
 
 void keyPressed(){
@@ -44,6 +43,7 @@ void keyPressed(){
     drawLetter(letters[i], x, y, 30);
   }
   rotors = update(rotors);
+  drawIOBoxes(30, 900, 350);
   //println(rotors.length());
 }
 
@@ -64,6 +64,23 @@ void drawArrow(float x1, float y1, float x2, float y2) {
   stroke(0);
   line(x1, y1, x2, y2);
   triangle(x2, y2+10, x2, y2-10, x2+10, y2);
+}
+
+void drawIOBoxes(float x1, float x2, float y) {
+  float boxWidth = 80;
+  float boxHeight = 40;
+  
+  fill(255);
+  stroke(0);
+  rect(x1, y,  boxWidth, boxHeight);
+  fill(0);
+  text(input, x1+boxWidth/2, y+boxHeight/2);
+  
+  fill(255);
+  stroke(0);
+  rect(x2, y,  boxWidth, boxHeight);
+  fill(0);
+  text(output, x2+boxWidth/2, y+boxHeight/2);
 }
 
 int index(char c) {
