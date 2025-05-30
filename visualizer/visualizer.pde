@@ -8,6 +8,7 @@ String rotors="AAC"; //Make an area to decide the rotor combination
 boolean pressed = false;
 String input = "";
 String output = "";
+ArrayList<key> keys = new ArrayList<>();
 // Something about reflector, find out later
 class key {
   char letter;
@@ -24,9 +25,8 @@ class key {
   }
 }
 void keyboard(String alpha){
-  ArrayList<key> keys = new ArrayList<>();
   float padding = 60;
-  float spacing = (width - 2 * padding) / (alpha.length()/2);
+  float spacing = (width - 2 * padding) / ((alpha.length()/2)-1);
   float y = 100;
   for (int j = 0; j < 2; j ++) {
     for (int i = 0; i < alpha.length()/2; i++) {
@@ -34,7 +34,7 @@ void keyboard(String alpha){
       float x = padding + i*spacing;
       key chr = new key(alpha.charAt(k), x, y, color(255, 255, 255));
       keys.add(chr);
-      drawLetter(chr.letter, chr.x, chr.y, 30);
+      drawLetter(chr.letter, chr.x, chr.y, 30, 240);
     }
     y += 2*padding;
   }
@@ -61,19 +61,33 @@ void setup() {
   }
   drawIOBoxes(30, 900, 350);
 }
-
+void changeKey(){
+  for (int i = 0; i < keys.size(); i ++){
+    key let = keys.get(i);
+    if (let.letter == letters[letters.length - 1]){
+      let.c = color(252, 230, 86);
+      drawLetter(let.letter, let.x, let.y, 30, let.c);
+      //delay(1000);
+      //drawLetter(let.letter, let.x, let.y, 30, color(240));
+    }
+    else if (let.c == color(252, 230, 86)){
+      drawLetter(let.letter, let.x, let.y, 30, color(240));
+    }
+  }
+}
 void keyPressed(){
   letters[0] = Character.toUpperCase(key);
   encode(letters[0], "", rotors); //call it directly to set the letters
-  float y = 300;
+  changeKey();
+  /*float y = 300;
   float padding = 60;
   float spacing = (width - 2 * padding) / (7);
   for (int i = 0; i < letters.length; i++) {
     float x = padding + i*spacing;
-    drawLetter(letters[i], x, y, 30);
+    drawLetter(letters[i], x, y, 30, 240);
   }
   rotors = update(rotors);
-  drawIOBoxes(30, 900, 350);
+  drawIOBoxes(30, 900, 350);*/
   //println(rotors.length());
 }
 
@@ -82,8 +96,8 @@ void draw() {
 //  //drawLetter(letters[1], 600, height/2);
 }
 
-void drawLetter(char letter, float xcor, float ycor, float radius) {
-  fill(240);
+void drawLetter(char letter, float xcor, float ycor, float radius, color c) {
+  fill(c);
   stroke(0);
   ellipse(xcor, ycor, 2*radius, 2*radius);
   fill(0);
