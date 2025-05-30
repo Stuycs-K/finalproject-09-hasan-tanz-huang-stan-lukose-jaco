@@ -79,7 +79,7 @@ def e(rotors):
     return (numWords(answer, 0), answer)
 
 #glist = [[i, j, k] for i in range(26) for j in range(26) for k in range(26)]
-glist = [[i, j, 0] for i in range(26) for j in range(26)]
+glist = [[i, j, k] for i in range(26) for j in range(26) for k in range(26)]
 def d():
     with multiprocessing.Pool(processes=os.cpu_count()) as pool:
         contents = pool.map(e, glist)
@@ -87,4 +87,4 @@ def d():
 contents = d()
 answer = [thing for thing in contents if thing is not None]
 answer = sorted(answer, reverse = True)
-#print(answer)
+print(answer[0])
