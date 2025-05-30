@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 char[] letters = new char[9];
 String[] r = {"EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO"};
 String reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
@@ -8,7 +9,36 @@ boolean pressed = false;
 String input = "";
 String output = "";
 // Something about reflector, find out later
-
+class key {
+  char letter;
+  float x;
+  float y;
+  color c;
+  
+  // Constructor
+  public key(char letter, float x, float y, color c){
+    this.letter = letter;
+    this.x = x;
+    this.y = y;
+    this.c = c;
+  }
+}
+void keyboard(String alpha){
+  ArrayList<key> keys = new ArrayList<>();
+  float padding = 60;
+  float spacing = (width - 2 * padding) / (alpha.length()/2);
+  float y = 100;
+  for (int j = 0; j < 2; j ++) {
+    for (int i = 0; i < alpha.length()/2; i++) {
+      int k=(13*j) + i;
+      float x = padding + i*spacing;
+      key chr = new key(alpha.charAt(k), x, y, color(255, 255, 255));
+      keys.add(chr);
+      drawLetter(chr.letter, chr.x, chr.y, 30);
+    }
+    y += 2*padding;
+  }
+}
 void setup() {
   size(1000, 600);         // Set window size
   background(255); // Set background color
@@ -17,7 +47,7 @@ void setup() {
   for (int i = 0; i < reflect.length(); i++){
     reflector.add(index(reflect.charAt(i)));
   }
-  
+  keyboard(alphabet);
   // Circle arrow details
   float padding = 60;
   float spacing = (width - 2 * padding) / (7);
