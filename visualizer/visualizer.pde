@@ -56,25 +56,33 @@ void setup() {
     float x = padding + i*spacing;
     if (i < letters.length-2) {
       float x2 = padding + (i+1) * spacing;
-      drawArrow(x+30, y, x2-40, y);
+      drawArrow(x+30, y+60, x2-40, y+60);
     }
   }
-  drawIOBoxes(30, 900, 350);
+  drawIOBoxes(30, 900, 410);
 }
 
 void keyPressed(){
-  letters[0] = Character.toUpperCase(key);
-  encode(letters[0], "", rotors); //call it directly to set the letters
-  float y = 300;
-  float padding = 60;
-  float spacing = (width - 2 * padding) / (7);
-  for (int i = 0; i < letters.length; i++) {
-    float x = padding + i*spacing;
-    drawLetter(letters[i], x, y, 30);
+  if (letters[0] == BACKSPACE || letters[0] == DELETE) {
+    if (input.length() > 0 && output.length() > 0) {
+      input = input.substring(0, input.length()-1);
+      output = output.substring(0, output.length()-1);
+    }
+
   }
-  rotors = update(rotors);
-  drawIOBoxes(30, 900, 350);
-  //println(rotors.length());
+  else {
+    letters[0] = Character.toUpperCase(key);
+    encode(letters[0], "", rotors); //call it directly to set the letters
+    float y = 300;
+    float padding = 60;
+    float spacing = (width - 2 * padding) / (7);
+    for (int i = 0; i < letters.length; i++) {
+      float x = padding + i*spacing;
+      drawLetter(letters[i], x, y+60, 30);
+    }
+    rotors = update(rotors);
+    drawIOBoxes(30, 900, 410);
+  }
 }
 
 void draw() {
@@ -126,6 +134,7 @@ char c(int num){
 
 char encode(char input, String plugboard, String rotors) {
   int order = index(input);
+  input += c(order);
   // pb function, ignore plugboard
   int pos = 1;
   for (int i = r.length - 1; i > -1; i--) {
@@ -149,6 +158,7 @@ char encode(char input, String plugboard, String rotors) {
     //println((char)((int)('A')+order));  
   }//
   letters[pos] = c(order);
+  output += c(order);
   return c(order);
 }
 
