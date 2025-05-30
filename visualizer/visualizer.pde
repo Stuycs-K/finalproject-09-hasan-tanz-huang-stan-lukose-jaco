@@ -4,17 +4,18 @@ char[] letters = new char[9];
 String[] r = {"EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO"};
 String reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
 ArrayList<Integer> reflector = new ArrayList<>();
-String rotors="AAC"; //Make an area to decide the rotor combination 
+String rotors="AAC"; //Make an area to decide the rotor combination
 boolean pressed = false;
 String input = "";
 String output = "";
+ArrayList<key> keys = new ArrayList<>();
 // Something about reflector, find out later
 class key {
   char letter;
   float x;
   float y;
   color c;
-  
+
   // Constructor
   public key(char letter, float x, float y, color c){
     this.letter = letter;
@@ -24,9 +25,8 @@ class key {
   }
 }
 void keyboard(String alpha){
-  ArrayList<key> keys = new ArrayList<>();
   float padding = 60;
-  float spacing = (width - 2 * padding) / (alpha.length()/2);
+  float spacing = (width - 2 * padding) / ((alpha.length()/2)-1);
   float y = 100;
   for (int j = 0; j < 2; j ++) {
     for (int i = 0; i < alpha.length()/2; i++) {
@@ -34,7 +34,7 @@ void keyboard(String alpha){
       float x = padding + i*spacing;
       key chr = new key(alpha.charAt(k), x, y, color(255, 255, 255));
       keys.add(chr);
-      drawLetter(chr.letter, chr.x, chr.y, 30);
+      drawLetter(chr.letter, chr.x, chr.y, 30, 240);
     }
     y += 2*padding;
   }
@@ -61,7 +61,20 @@ void setup() {
   }
   drawIOBoxes(30, 900, 410);
 }
-
+void changeKey(){
+  for (int i = 0; i < keys.size(); i ++){
+    key let = keys.get(i);
+    if (let.letter == letters[letters.length - 1]){
+      let.c = color(252, 230, 86);
+      drawLetter(let.letter, let.x, let.y, 30, let.c);
+      //delay(1000);
+      //drawLetter(let.letter, let.x, let.y, 30, color(240));
+    }
+    else if (let.c == color(252, 230, 86)){
+      drawLetter(let.letter, let.x, let.y, 30, color(240));
+    }
+  }
+}
 void keyPressed(){
   if (letters[0] == BACKSPACE || letters[0] == DELETE) {
     if (input.length() > 0 && output.length() > 0) {
@@ -73,12 +86,13 @@ void keyPressed(){
   else {
     letters[0] = Character.toUpperCase(key);
     encode(letters[0], "", rotors); //call it directly to set the letters
+    changeKey();
     float y = 300;
     float padding = 60;
     float spacing = (width - 2 * padding) / (7);
     for (int i = 0; i < letters.length; i++) {
       float x = padding + i*spacing;
-      drawLetter(letters[i], x, y+60, 30);
+      drawLetter(letters[i], x, y+60, 30, 240);
     }
     rotors = update(rotors);
     drawIOBoxes(30, 900, 410);
@@ -90,8 +104,8 @@ void draw() {
 //  //drawLetter(letters[1], 600, height/2);
 }
 
-void drawLetter(char letter, float xcor, float ycor, float radius) {
-  fill(240);
+void drawLetter(char letter, float xcor, float ycor, float radius, color c) {
+  fill(c);
   stroke(0);
   ellipse(xcor, ycor, 2*radius, 2*radius);
   fill(0);
@@ -107,13 +121,13 @@ void drawArrow(float x1, float y1, float x2, float y2) {
 void drawIOBoxes(float x1, float x2, float y) {
   float boxWidth = 80;
   float boxHeight = 40;
-  
+
   fill(255);
   stroke(0);
   rect(x1, y,  boxWidth, boxHeight);
   fill(0);
   text(input, x1+boxWidth/2, y+boxHeight/2);
-  
+
   fill(255);
   stroke(0);
   rect(x2, y,  boxWidth, boxHeight);
@@ -155,7 +169,7 @@ char encode(char input, String plugboard, String rotors) {
     order = mod26(order);
     letters[pos] = c(order);
     pos += 1;
-    //println((char)((int)('A')+order));  
+    //println((char)((int)('A')+order));
   }//
   letters[pos] = c(order);
   output += c(order);
