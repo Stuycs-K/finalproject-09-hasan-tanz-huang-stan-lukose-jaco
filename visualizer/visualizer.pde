@@ -3,6 +3,7 @@ String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 char[] letters = new char[9];
 String[] r = {"EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO"};
 String reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
+Character[] rollVals={'E', 'V'};
 ArrayList<Integer> reflector = new ArrayList<>();
 String rotors="AAC"; //Make an area to decide the rotor combination
 boolean showSteps = false;
@@ -72,6 +73,7 @@ void keyPressed(){
     if (input.length() > 0 && output.length() > 0) {
       input = input.substring(0, input.length()-1);
       output = output.substring(0, output.length()-1);
+      rotors = update(rotors, true);
     }
 
   }
@@ -83,7 +85,7 @@ void keyPressed(){
     letters[0] = chrtr;
     encode(letters[0], "", rotors); //call it directly to set the letters
     changeKey();
-    rotors = update(rotors);
+    rotors = update(rotors, false);
     if (showSteps){
       steps(showSteps);
     }
@@ -171,16 +173,24 @@ char encode(char chr, String plugboard, String rotors) {
   return c(order);
 }
 
-String update(String rotors) {
-  if (rotors.charAt(2) == 'V') {
-    rotors = rotors.substring(0,1) + (char)(c(index(rotors.charAt(1))+1)) + (char)(rotors.charAt(2));
+String update(String rotors, boolean reverse) {
+  Character[] roll = rollVals.clone();
+  int inc = 1;
+  if (reverse){
+    for (int i = 0; i < rollVals.length; i ++){
+      roll[i] = (char)(c(index(rollVals[i])+1));
+    }
+    inc = -1;
+  }
+  if (rotors.charAt(2) == roll[1]) {
+    rotors = rotors.substring(0,1) + (char)(c(index(rotors.charAt(1))+inc)) + (char)(rotors.charAt(2));
     print(rotors);
-    if (rotors.charAt(1) == 'E') {
-      rotors = c(index(rotors.charAt(0))+1) + rotors.substring(1);
+    if (rotors.charAt(1) == roll[0]) {
+      rotors = c(index(rotors.charAt(0))+inc) + rotors.substring(1);
       print(rotors);
     }
   }
-  rotors = rotors.substring(0,2) + c(index(rotors.charAt(2))+1);
+  rotors = rotors.substring(0,2) + c(index(rotors.charAt(2))+inc);
   print(rotors);
   return rotors;
 }
