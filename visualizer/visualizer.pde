@@ -5,7 +5,7 @@ String[] r = {"EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJ
 String reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
 ArrayList<Integer> reflector = new ArrayList<>();
 String rotors="AAC"; //Make an area to decide the rotor combination
-boolean pressed = false;
+boolean showSteps = false;
 String input = "";
 String output = "";
 ArrayList<key> keys = new ArrayList<>();
@@ -44,22 +44,13 @@ void setup() {
   background(255); // Set background color
   textAlign(CENTER, CENTER);
   textSize(24);
+  fill(0);
+  text("TAB to show Encryption Steps", 160, 20);
   for (int i = 0; i < reflect.length(); i++){
     reflector.add(index(reflect.charAt(i)));
   }
   keyboard(alphabet);
-  // Circle arrow details
-  float padding = 60;
-  float spacing = (width - 2 * padding) / (7);
-  float y = 300;
-  for (int i = 0; i < letters.length; i++) {
-    float x = padding + i*spacing;
-    if (i < letters.length-2) {
-      float x2 = padding + (i+1) * spacing;
-      drawArrow(x+30, y+60, x2-40, y+60);
-    }
-  }
-  drawIOBoxes(30, 900, 410);
+  drawIOBoxes(30, 410);
 }
 void changeKey(){
   for (int i = 0; i < keys.size(); i ++){
@@ -76,27 +67,28 @@ void changeKey(){
   }
 }
 void keyPressed(){
-  if (letters[0] == BACKSPACE || letters[0] == DELETE) {
+  Character chrtr = Character.toUpperCase(key);
+  if (chrtr == BACKSPACE || chrtr == DELETE) {
     if (input.length() > 0 && output.length() > 0) {
       input = input.substring(0, input.length()-1);
       output = output.substring(0, output.length()-1);
     }
 
   }
-  else {
-    letters[0] = Character.toUpperCase(key);
+  else if(chrtr == TAB){
+    showSteps = !showSteps;
+    steps(showSteps);
+  }
+  else if(Character.isLetter(chrtr)) {
+    letters[0] = chrtr;
     encode(letters[0], "", rotors); //call it directly to set the letters
     changeKey();
-    float y = 300;
-    float padding = 60;
-    float spacing = (width - 2 * padding) / (7);
-    for (int i = 0; i < letters.length; i++) {
-      float x = padding + i*spacing;
-      drawLetter(letters[i], x, y+60, 30, 240);
-    }
     rotors = update(rotors);
-    drawIOBoxes(30, 900, 410);
+    if (showSteps){
+      steps(showSteps);
+    }
   }
+  drawIOBoxes(30, 410);
 }
 
 void draw() {
@@ -118,20 +110,23 @@ void drawArrow(float x1, float y1, float x2, float y2) {
   triangle(x2, y2+10, x2, y2-10, x2+10, y2);
 }
 
-void drawIOBoxes(float x1, float x2, float y) {
-  float boxWidth = 80;
-  float boxHeight = 40;
+void drawIOBoxes(float pad, float y) {
+  print(width);
+  float boxWidth = 400;
+  float boxHeight = 100;
+  float x2=width-boxWidth-pad;
 
   fill(255);
   stroke(0);
-  rect(x1, y,  boxWidth, boxHeight);
+  rect(pad, y,  boxWidth, boxHeight);
   fill(0);
-  text(input, x1+boxWidth/2, y+boxHeight/2);
+  text(input, pad+boxWidth/2, y+boxHeight/2);
 
   fill(255);
   stroke(0);
   rect(x2, y,  boxWidth, boxHeight);
   fill(0);
+  print(1);
   text(output, x2+boxWidth/2, y+boxHeight/2);
 }
 
@@ -146,9 +141,9 @@ char c(int num){
   return (char)(num + (int)('A'));
 }
 
-char encode(char input, String plugboard, String rotors) {
-  int order = index(input);
-  input += c(order);
+char encode(char chr, String plugboard, String rotors) {
+  int order = index(chr);
+  input += chr;
   // pb function, ignore plugboard
   int pos = 1;
   for (int i = r.length - 1; i > -1; i--) {
@@ -172,7 +167,7 @@ char encode(char input, String plugboard, String rotors) {
     //println((char)((int)('A')+order));
   }//
   letters[pos] = c(order);
-  output += c(order);
+  output += letters[letters.length-1];
   return c(order);
 }
 
@@ -188,4 +183,28 @@ String update(String rotors) {
   rotors = rotors.substring(0,2) + c(index(rotors.charAt(2))+1);
   print(rotors);
   return rotors;
+}
+
+void steps(boolean show){
+  float y = 360;
+  float padding = 60;
+  float spacing = (width - 2 * padding) / (7);
+  float radius = 30;
+  color col = 240; 
+  if (show){
+    print("wtf");
+    for (int i = 0; i < letters.length; i++) {
+      float x = padding + i*spacing;
+      drawLetter(letters[i], x, y, radius, col);
+      if (i < letters.length-2) {
+        float x2 = padding + (i+1) * spacing;
+        drawArrow(x+30, y, x2-40, y);
+      }
+    }
+  }
+  else{
+    fill(255); // white color, same as background
+    noStroke();
+    rect(0, y-radius, width, y+radius); // covers up that area
+  }
 }
