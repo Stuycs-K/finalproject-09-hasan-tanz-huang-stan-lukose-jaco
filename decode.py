@@ -87,5 +87,10 @@ def d():
 contents = d()
 answer = [thing for thing in contents if thing is not None]
 answer = sorted(answer, reverse = True)
-print(answer[0])
-print(answer[1])
+
+with open("test.txt", "r") as files:
+    for i in range(50):
+        string= files.readline()
+        contents = d()
+        contents = sorted(contents, reverse = True)
+        print(contents[0])
