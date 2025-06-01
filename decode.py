@@ -53,7 +53,7 @@ fconsonants = ['H', 'L', 'N', 'R', 'W', 'Y']
 #def illegal():
 
 dictionary = {}
-with open ("wiki-100k.txt", "r") as file:
+with open ("new.txt", "r") as file:
     for i in range(100000):
         thing = file.readline().strip().upper()
         if (len(thing) != 0 and (len(thing) != 1 or thing == "I" or thing == "A")):
@@ -88,3 +88,4 @@ contents = d()
 answer = [thing for thing in contents if thing is not None]
 answer = sorted(answer, reverse = True)
 print(answer[0])
+print(answer[1])
