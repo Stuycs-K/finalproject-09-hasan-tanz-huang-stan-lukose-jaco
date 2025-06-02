@@ -69,7 +69,19 @@ void changeKey(){
     }
   }
 }
+
 void keyPressed(){
+  if (selectingRotor && selectedRotorIndex != -1) {
+    char current = rotors.charAt(selectedRotorIndex);
+    if (keyCode == UP) {
+      current = c(mod26(index(current)-1));
+    }
+    else if (keyCode == DOWN) {
+      current = c(mod26(index(current)+1));
+    }
+    rotors = rotors.substring(0, selectedRotorIndex) + current + rotors.substring(selectedRotorIndex+1);
+    return;
+  }
   Character chrtr = Character.toUpperCase(key);
   if (chrtr == BACKSPACE || chrtr == DELETE) {
     if (input.length() > 0 && output.length() > 0) {
@@ -134,6 +146,22 @@ void drawIOBoxes(float pad, float y) {
   print(1);
   text(output, x2+boxWidth/2, y+boxHeight/2);
 }
+
+void mousePressed() {
+  for (int i = 0; i < 3; i++) {
+    float x = 420 + i*80;
+    if (mouseX > x - 20 && mouseX < x+20 && mouseY > 265 && mouseY < 325) {
+      selectingRotor = true;
+      selectedRotorIndex = i;
+      //print(selectingRotor);
+      //print(selectedRotorIndex);
+      return;
+    }
+   }
+  selectingRotor = false;
+  selectedRotorIndex = -1;
+  }
+  
 
 void drawRotors() {
   textSize(32);
