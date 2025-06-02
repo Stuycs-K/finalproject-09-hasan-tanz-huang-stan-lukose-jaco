@@ -3,15 +3,11 @@ import sys
 def index(char):
     return (ord(char) - ord('A')) % 26
 #setup
-r = ["EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO"]
+oldr = ["EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO", "ESOVPZJAYQUIRHXLNFTGKDCMWB", "VZBRGITYUPSDNHLXAWMJQOFECK"]
+r = []
 findr = [[0] * 26, [0] * 26, [0] * 26]
 reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT"
 reflector = []
-for i in range(len(r)):
-    r[i] = list(r[i])
-    for j in range(len(r[i])):
-        r[i][j] = index(r[i][j])
-        findr[i][r[i][j]] = j
 for i in range(len(reflect)):
     reflector.append(index(reflect[i]))
 
@@ -62,7 +58,8 @@ def parseArgs():
     values = []
     try:
         plugboard = sys.argv[1]
-        rotors = sys.argv[2]
+        number = sys.argv[2]
+        rotors = sys.argv[3]
     except IndexError:
         print("Invalid number of arguments")
         return None
@@ -82,6 +79,13 @@ def parseArgs():
         plugboard = [list(joe) for joe in plugboard1]
     else:
         plugboard = []
+    if (len(number) != 3):
+        print("Rotor numbers must have length 3")
+        return None
+    if (not(number.isnumeric())):
+        print("Rotor numbers must be numeric")
+        return(None)
+    number = list(number)
     if (len(rotors) != 3):
         print("Rotor settings must have length 3")
         return None
@@ -90,13 +94,9 @@ def parseArgs():
         if (not(ord(rotors[i]) >= ord('A') and ord(rotors[i]) <= ord('Z'))):
             print("Rotor settings must be 3 consecutive letters")
             return(None)
-    return [plugboard, rotors]
-
+    return [plugboard, number, rotors]
 
 def enigma(string):
-    arguments = parseArgs()
-    if (arguments is None):
-        return None
     plugboard = arguments[0]
     rotors = arguments[1]
     for i in range(len(plugboard)):
@@ -111,8 +111,20 @@ def enigma(string):
             answer += encode(string[i].upper(), plugboard, rotors)
     return answer
 
-with open("orwell.txt", "r") as file:
-    for i in range(1):
-        thing = file.readline()
-        print(len(thing))
-        print(enigma(thing))
+arguments = parseArgs()
+print(arguments)
+for i in range(len(arguments)):
+    r.append(oldr[int(arguments[1][i]) - 1])
+print(r)
+for i in range(len(r)):
+    r[i] = list(r[i])
+    for j in range(len(r[i])):
+        r[i][j] = index(r[i][j])
+        findr[i][r[i][j]] = j
+#print(r)
+if (arguments != None and len(arguments) == 3):
+    with open("orwell.txt", "r") as file:
+        for i in range(1):
+            thing = file.readline()
+            print(len(thing))
+            print(enigma(thing))
