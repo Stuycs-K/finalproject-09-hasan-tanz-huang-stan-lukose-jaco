@@ -111,7 +111,8 @@ def enigma(string):
             answer += encode(string[i].upper(), plugboard, rotors)
     return answer
 
-with open("sentences.txt", "r") as file:
-    for i in range(50):
+with open("orwell.txt", "r") as file:
+    for i in range(1):
         thing = file.readline()
+        print(len(thing))
         print(enigma(thing))

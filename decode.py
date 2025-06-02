@@ -55,31 +55,33 @@ fconsonants = ['H', 'L', 'N', 'R', 'W', 'Y']
 dictionary = {}
 with open ("new.txt", "r") as file:
     for i in range(100000):
-        thing = file.readline().strip().upper()
-        if (len(thing) != 0 and (len(thing) != 1 or thing == "I" or thing == "A")):
+        thing = file.readline().strip()
+        if (len(thing) != 0):
             dictionary[thing] = 1
 
-def numWords(string, start):
+def numWords(string1, start):
     answer = 0
-    num = len(string)
-    for i in range(start, len(string)):
-        if (string[start:i] in dictionary):
-            answer = answer + numWords(string, i) + 1
+    num = len(string1)
+    for i in range(start, num):
+        text = string1[start:i]
+        if (text in dictionary):
+            if (i < num - 2 and string1[i] in consonants and string1[i + 1] in consonants or start - i > 19):
+                continue
+            #print("dictionary[\""+ string1[start:i] + "\"] = 1")
+            answer = answer + numWords(string1, i) + 1
     return answer
 
 def e(rotors):
     answer = ""
-    thing = 0
     check = []
-    rotors1 = rotors.copy()
     for i in range(len(string)):
         update(rotors)
         answer += encode(string[i], rotors)
     #print(answer)
     return (numWords(answer, 0), answer)
 
-#glist = [[i, j, k] for i in range(26) for j in range(26) for k in range(26)]
 glist = [[i, j, k] for i in range(26) for j in range(26) for k in range(26)]
+#glist = [[15,6,25]]
 def d():
     with multiprocessing.Pool(processes=os.cpu_count()) as pool:
         contents = pool.map(e, glist)
@@ -88,9 +90,11 @@ contents = d()
 answer = [thing for thing in contents if thing is not None]
 answer = sorted(answer, reverse = True)
 
-with open("test.txt", "r") as files:
-    for i in range(50):
-        string= files.readline()
-        contents = d()
-        contents = sorted(contents, reverse = True)
-        print(contents[0])
+for k in range(1):
+    with open("john.txt", "r") as files:
+        for i in range(1):
+            string = files.readline().strip()
+            contents = d()
+            contents = sorted(contents, reverse = True)
+            print(contents[0])
+            print(contents[1])
