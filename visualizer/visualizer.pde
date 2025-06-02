@@ -48,7 +48,8 @@ void setup() {
   textAlign(CENTER, CENTER);
   textSize(24);
   fill(0);
-  text("TAB to show Encryption Steps", 160, 20);
+  text("TAB to show Encryption Steps. DEL to remove characters", 290, 20);
+  text("To change rotors, click and use UP, DOWN keys", 240, 40);
   for (int i = 0; i < reflect.length(); i++){
     reflector.add(index(reflect.charAt(i)));
   }
