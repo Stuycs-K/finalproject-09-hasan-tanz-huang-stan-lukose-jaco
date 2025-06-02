@@ -12,6 +12,7 @@ String output = "";
 ArrayList<key> keys = new ArrayList<>();
 boolean selectingRotor = false;
 int selectedRotorIndex = -1;
+int[] rotorOrder = {3, 2, 1};
 // Something about reflector, find out later
 class key {
   char letter;
@@ -158,6 +159,9 @@ void mousePressed() {
       //print(selectedRotorIndex);
       return;
     }
+    if (mouseX > x-60 && mouseX < x - 20 && mouseY > 265 && mouseY < 325) {
+      //Continue with rotor order here
+    }
    }
   selectingRotor = false;
   selectedRotorIndex = -1;
@@ -226,20 +230,20 @@ String update(String rotors, boolean reverse) {
   Character[] roll = rollVals.clone();
   int inc = 1;
   if (reverse){
-    for (int i = 0; i < rollVals.length; i ++){
-      roll[i] = (char)(c(index(rollVals[i])+1));
+    for (int i = 0; i < rollVals.length; i++){
+      roll[i] = c(index(rollVals[i])+1);
     }
     inc = -1;
   }
   if (rotors.charAt(2) == roll[1]) {
-    rotors = rotors.substring(0,1) + (char)(c(index(rotors.charAt(1))+inc)) + (char)(rotors.charAt(2));
+    rotors = rotors.substring(0,1) + c(mod26(index(rotors.charAt(1))+inc)) + rotors.charAt(2);
     print(rotors);
     if (rotors.charAt(1) == roll[0]) {
-      rotors = c(index(rotors.charAt(0))+inc) + rotors.substring(1);
+      rotors = c(mod26(index(rotors.charAt(0))+inc)) + rotors.substring(1);
       print(rotors);
     }
   }
-  rotors = rotors.substring(0,2) + c(index(rotors.charAt(2))+inc);
+  rotors = rotors.substring(0,2) + c(mod26(index(rotors.charAt(2))+inc));
   print(rotors);
   return rotors;
 }
@@ -251,7 +255,7 @@ void steps(boolean show){
   float radius = 30;
   color col = 240; 
   if (show){
-    print("wtf");
+    //print("wtf");
     for (int i = 0; i < letters.length; i++) {
       float x = padding + i*spacing;
       drawLetter(letters[i], x, y, radius, col);
