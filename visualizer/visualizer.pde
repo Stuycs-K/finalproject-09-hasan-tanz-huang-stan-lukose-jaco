@@ -10,6 +10,8 @@ boolean showSteps = false;
 String input = "";
 String output = "";
 ArrayList<key> keys = new ArrayList<>();
+boolean selectingRotor = false;
+int selectedRotorIndex = -1;
 // Something about reflector, find out later
 class key {
   char letter;
@@ -94,6 +96,7 @@ void keyPressed(){
 }
 
 void draw() {
+  drawRotors();
 //  //drawLetter(letters[0], 200, height/2);
 //  //drawLetter(letters[1], 600, height/2);
 }
@@ -130,6 +133,23 @@ void drawIOBoxes(float pad, float y) {
   fill(0);
   print(1);
   text(output, x2+boxWidth/2, y+boxHeight/2);
+}
+
+void drawRotors() {
+  textSize(32);
+  for (int i = 0; i < 3; i++) {
+    float x = 420 + i * 80;
+    if (selectingRotor && selectedRotorIndex == i) {
+      fill(color(180, 220, 255));
+    } 
+    else {
+      fill(240);
+    }
+    stroke(0);
+    rect(x-20, 265, 40, 60);
+    fill(0);
+    text(rotors.charAt(i), x, 295);
+  }
 }
 
 int index(char c) {
