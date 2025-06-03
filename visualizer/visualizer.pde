@@ -73,6 +73,8 @@ void changeKey(){
 }
 
 void keyPressed(){
+  textAlign(CENTER, CENTER);
+  textSize(24);
   if (selectingRotor && selectedRotorIndex != -1) {
     char current = rotors.charAt(selectedRotorIndex);
     if (keyCode == UP) {
@@ -110,6 +112,8 @@ void keyPressed(){
 }
 
 void draw() {
+  textAlign(CENTER, CENTER);
+  textSize(24);
   drawRotors();
 //  //drawLetter(letters[0], 200, height/2);
 //  //drawLetter(letters[1], 600, height/2);
@@ -130,23 +134,25 @@ void drawArrow(float x1, float y1, float x2, float y2) {
 }
 
 void drawIOBoxes(float pad, float y) {
-  print(width);
   float boxWidth = 400;
   float boxHeight = 100;
   float x2=width-boxWidth-pad;
+  textSize(16);
+  textAlign(LEFT, TOP);
+  textLeading(18); // Line spacing
 
   fill(255);
   stroke(0);
   rect(pad, y,  boxWidth, boxHeight);
   fill(0);
-  text(input, pad+boxWidth/2, y+boxHeight/2);
+  text(input, pad + 5, y + 5, boxWidth-10, boxHeight-10);
 
   fill(255);
   stroke(0);
   rect(x2, y,  boxWidth, boxHeight);
   fill(0);
   print(1);
-  text(output, x2+boxWidth/2, y+boxHeight/2);
+  text(output, x2+5, y+5, boxWidth-10, boxHeight-10);
 }
 
 void mousePressed() {
