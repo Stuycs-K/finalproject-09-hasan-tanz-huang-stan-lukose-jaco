@@ -10,6 +10,9 @@ boolean showSteps = false;
 String input = "";
 String output = "";
 ArrayList<key> keys = new ArrayList<>();
+boolean selectingRotor = false;
+int selectedRotorIndex = -1;
+int[] rotorOrder = {3, 2, 1};
 // Something about reflector, find out later
 class key {
   char letter;
@@ -46,7 +49,8 @@ void setup() {
   textAlign(CENTER, CENTER);
   textSize(24);
   fill(0);
-  text("TAB to show Encryption Steps", 160, 20);
+  text("TAB to show Encryption Steps. DEL to remove characters", 290, 20);
+  text("To change rotors, click and use UP, DOWN keys", 240, 40);
   for (int i = 0; i < reflect.length(); i++){
     reflector.add(index(reflect.charAt(i)));
   }
@@ -67,7 +71,19 @@ void changeKey(){
     }
   }
 }
+
 void keyPressed(){
+  if (selectingRotor && selectedRotorIndex != -1) {
+    char current = rotors.charAt(selectedRotorIndex);
+    if (keyCode == UP) {
+      current = c(mod26(index(current)-1));
+    }
+    else if (keyCode == DOWN) {
+      current = c(mod26(index(current)+1));
+    }
+    rotors = rotors.substring(0, selectedRotorIndex) + current + rotors.substring(selectedRotorIndex+1);
+    return;
+  }
   Character chrtr = Character.toUpperCase(key);
   if (chrtr == BACKSPACE || chrtr == DELETE) {
     if (input.length() > 0 && output.length() > 0) {
@@ -94,6 +110,7 @@ void keyPressed(){
 }
 
 void draw() {
+  drawRotors();
 //  //drawLetter(letters[0], 200, height/2);
 //  //drawLetter(letters[1], 600, height/2);
 }
@@ -130,6 +147,42 @@ void drawIOBoxes(float pad, float y) {
   fill(0);
   print(1);
   text(output, x2+boxWidth/2, y+boxHeight/2);
+}
+
+void mousePressed() {
+  for (int i = 0; i < 3; i++) {
+    float x = 420 + i*80;
+    if (mouseX > x - 20 && mouseX < x+20 && mouseY > 265 && mouseY < 325) {
+      selectingRotor = true;
+      selectedRotorIndex = i;
+      //print(selectingRotor);
+      //print(selectedRotorIndex);
+      return;
+    }
+    if (mouseX > x-60 && mouseX < x - 20 && mouseY > 265 && mouseY < 325) {
+      //Continue with rotor order here
+    }
+   }
+  selectingRotor = false;
+  selectedRotorIndex = -1;
+  }
+  
+
+void drawRotors() {
+  textSize(32);
+  for (int i = 0; i < 3; i++) {
+    float x = 420 + i * 80;
+    if (selectingRotor && selectedRotorIndex == i) {
+      fill(color(180, 220, 255));
+    } 
+    else {
+      fill(240);
+    }
+    stroke(0);
+    rect(x-20, 265, 40, 60);
+    fill(0);
+    text(rotors.charAt(i), x, 295);
+  }
 }
 
 int index(char c) {
@@ -177,20 +230,20 @@ String update(String rotors, boolean reverse) {
   Character[] roll = rollVals.clone();
   int inc = 1;
   if (reverse){
-    for (int i = 0; i < rollVals.length; i ++){
-      roll[i] = (char)(c(index(rollVals[i])+1));
+    for (int i = 0; i < rollVals.length; i++){
+      roll[i] = c(index(rollVals[i])+1);
     }
     inc = -1;
   }
   if (rotors.charAt(2) == roll[1]) {
-    rotors = rotors.substring(0,1) + (char)(c(index(rotors.charAt(1))+inc)) + (char)(rotors.charAt(2));
+    rotors = rotors.substring(0,1) + c(mod26(index(rotors.charAt(1))+inc)) + rotors.charAt(2);
     print(rotors);
     if (rotors.charAt(1) == roll[0]) {
-      rotors = c(index(rotors.charAt(0))+inc) + rotors.substring(1);
+      rotors = c(mod26(index(rotors.charAt(0))+inc)) + rotors.substring(1);
       print(rotors);
     }
   }
-  rotors = rotors.substring(0,2) + c(index(rotors.charAt(2))+inc);
+  rotors = rotors.substring(0,2) + c(mod26(index(rotors.charAt(2))+inc));
   print(rotors);
   return rotors;
 }
@@ -202,7 +255,7 @@ void steps(boolean show){
   float radius = 30;
   color col = 240; 
   if (show){
-    print("wtf");
+    //print("wtf");
     for (int i = 0; i < letters.length; i++) {
       float x = padding + i*spacing;
       drawLetter(letters[i], x, y, radius, col);
