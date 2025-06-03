@@ -13,3 +13,7 @@ Add key object and simulated light up keyboard.
 
 ### 2025-05-30 - Streamline previous commit
 Added changeKey() function to declutter and also made visually cleaner.
+
+
+### 2025-05-30 - Delete+backspace+Show Steps
+Allow deletion of characters and show each step of encryption if desired.
