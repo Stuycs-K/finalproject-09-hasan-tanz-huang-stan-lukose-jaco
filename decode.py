@@ -65,7 +65,7 @@ def numWords(string1, start):
     for i in range(start, num):
         text = string1[start:i]
         if (text in dictionary):
-            if (i < num - 2 and string1[i] in consonants and string1[i + 1] in consonants or start - i > 19):
+            if (start - i > 19 or (i < num - 2 and string1[i] in consonants and string1[i + 1] in consonants)):
                 continue
             #print("dictionary[\""+ string1[start:i] + "\"] = 1")
             answer = answer + numWords(string1, i) + 1
@@ -73,15 +73,16 @@ def numWords(string1, start):
 
 def e(rotors):
     answer = ""
+    rotors1 = rotors
     check = []
     for i in range(len(string)):
         update(rotors)
         answer += encode(string[i], rotors)
     #print(answer)
-    return (numWords(answer, 0), answer)
+    return (numWords(answer, 0), answer, rotors)
 
 glist = [[i, j, k] for i in range(26) for j in range(26) for k in range(26)]
-#glist = [[15,6,25]]
+#glist = [[0,0,0]]
 def d():
     with multiprocessing.Pool(processes=os.cpu_count()) as pool:
         contents = pool.map(e, glist)
@@ -91,10 +92,17 @@ answer = [thing for thing in contents if thing is not None]
 answer = sorted(answer, reverse = True)
 
 for k in range(1):
-    with open("john.txt", "r") as files:
-        for i in range(1):
+    with open("test.txt", "r") as files:
+        for i in range(15):
             string = files.readline().strip()
             contents = d()
             contents = sorted(contents, reverse = True)
-            print(contents[0])
-            print(contents[1])
+            for j in range(3):
+                if (len(contents[j][1]) > 30):
+                    finalanswer = contents[j][1][:30] + "..."
+                else:
+                    finalanswer = contents[j][1]
+                finalstring = ""
+                for m in range(len(contents[j][2])):
+                    finalstring += chr(ord('A') + int(contents[j][2][m]))
+                print(finalstring + ": " + finalanswer)
