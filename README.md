@@ -7,13 +7,15 @@ Tanzeem Hasan, Stanley Huang, Jacob Lukose
 
 ### Project Description:
 This project will simulate the Enigma machine used in World War II.
-With this project, we will recreate the same Enigma machine that was used in World War II.
+With this project, we will recreate the Enigma machine that was used in World War II.
 - Enigma encryption
 - Enigma decryption
-<!-- - Create our own version of enigma? GigEnigma. This one might incorporate more than the 26 letters of the alphabet. Oh, we can try using spanish. (Low priority)-->
 - Visualize process using processing
-  - Letters moving along wires
-  - Input letter -> rotor -> output letter, repeat
+  - See the output at each step in the process using TAB
+  - Manually change the order of the rotors used, along with the letters of the rotors currently being used using UP and DOWN arrow keys
+  - Highlight the output letter after encrypting in a manner similar to the original enigma machine
+  - Encrypt phrases or sentences and display the original and encrypted versions side by side
+  - Use the DELETE or BACKSPACE keys to return to the previous rotor combination and erase your inputs
 
 
 ### Instructions:
