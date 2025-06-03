@@ -8,6 +8,8 @@ r = []
 findr = [[0] * 26, [0] * 26, [0] * 26]
 reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT"
 reflector = []
+oldover = ['Q', 'E', 'V', 'J', 'Z']
+rollover = []
 for i in range(len(reflect)):
     reflector.append(index(reflect[i]))
 
@@ -48,9 +50,9 @@ def pb(char, plugboard):
     return char
 
 def update(rotors):
-    if (rotors[2] == index('V')):
+    if (rotors[2] == index(rollover[2])):
         rotors[1] = mod26(rotors[1] + 1)
-        if (rotors[1] == index('E')):
+        if (rotors[1] == index(rollover[1])):
             rotors[0] = mod26(rotors[0] + 1)
     rotors[2] = mod26(rotors[2] + 1)
 
@@ -114,11 +116,9 @@ arguments = parseArgs()
 if (arguments is not None):
     plugboard = arguments[0]
     rotors = arguments[2]
-    print(plugboard)
-    print(arguments)
     for i in range(len(arguments[1])):
-        r.insert(0, oldr[int(arguments[1][i]) - 1])
-    print(r)
+        r.append(oldr[int(arguments[1][i]) - 1])
+        rollover.append(oldover[int(arguments[1][i]) - 1])
     for i in range(len(r)):
         r[i] = list(r[i])
         for j in range(len(r[i])):
