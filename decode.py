@@ -1,15 +1,21 @@
 import multiprocessing
 import os
 import sys
+from itertools import permutations
 
 def index(char):
-    return (ord(char) - ord('A')) % 26
+    if (not isinstance(char, int)):
+        return (ord(char) - ord('A')) % 26
+    else:
+        return char
 #setup
 oldr = ["EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO", "ESOVPZJAYQUIRHXLNFTGKDCMWB", "VZBRGITYUPSDNHLXAWMJQOFECK"]
 r = []
 findr = [[0] * 26, [0] * 26, [0] * 26]
 reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT"
 reflector = []
+oldover = ['Q', 'E', 'V', 'J', 'Z']
+rollover = []
 for i in range(len(reflect)):
     reflector.append(index(reflect[i]))
 
@@ -37,9 +43,9 @@ def encode(char, rotors):
     return chr(char + ord('A'))
 
 def update(rotors):
-    if (rotors[2] == 21):
+    if (rotors[2] == index(rollover[2])):
         rotors[1] = mod26(rotors[1] + 1)
-        if (rotors[1] == 4):
+        if (rotors[1] == index(rollover[1])):
             rotors[0] = mod26(rotors[0] + 1)
     rotors[2] = mod26(rotors[2] + 1)
 
@@ -51,7 +57,7 @@ fconsonants = ['H', 'L', 'N', 'R', 'W', 'Y']
 
 dictionary = {}
 with open ("new.txt", "r") as file:
-    for i in range(100000):
+    for i in range(92924):
         thing = file.readline().strip()
         if (len(thing) != 0):
             dictionary[thing] = 1
@@ -89,7 +95,6 @@ def parseArgs():
     try:
         number = sys.argv[1]
     except IndexError:
-        print("Invalid number of arguments")
         return None
     if (len(number) != 3):
         print("Rotor numbers must have length 3")
@@ -112,19 +117,19 @@ arguments = parseArgs()
 if (arguments is not None):
     #print(arguments)
     for i in range(len(arguments)):
-        r.insert(0, oldr[int(arguments[i]) - 1])
+        r.append(oldr[int(arguments[i]) - 1])
+        rollover.append(oldover[int(arguments[i]) - 1])
+    print(r)
+    print(rollover)
     for i in range(len(r)):
         r[i] = list(r[i])
         for j in range(len(r[i])):
             r[i][j] = index(r[i][j])
             findr[i][r[i][j]] = j
     #print(r)
-    contents = d()
-    answer = [thing for thing in contents if thing is not None]
-    answer = sorted(answer, reverse = True)
-
     string = input("Input: ")
     contents = d()
+    contents = [thing for thing in contents if thing is not None]
     contents = sorted(contents, reverse = True)
     for j in range(3):
         if (len(contents[j][1]) > 30):
@@ -135,3 +140,41 @@ if (arguments is not None):
         for m in range(len(contents[j][2])):
             finalstring += chr(ord('A') + int(contents[j][2][m]))
         print(finalstring + ": " + finalanswer)
+
+
+if (arguments is None):
+    list1 = [1, 2, 3, 4, 5]
+    masterlist = []
+    perms = list(permutations(list1, 3))
+    string = input("Input: ")
+    for k in range(len(perms)):
+        #print(k)
+        for m in range(len(perms[k])):
+            r.append(oldr[int(perms[k][m]) - 1])
+            rollover.append(oldover[int(perms[k][m]) - 1])
+        for i in range(len(r)):
+            r[i] = list(r[i])
+            for j in range(len(r[i])):
+                r[i][j] = index(r[i][j])
+                findr[i][r[i][j]] = j
+        contents = d()
+        answer = [thing + perms[k] for thing in contents if thing is not None]
+        masterlist += answer
+        r = []
+        rollover = []
+        findr = [[0] * 26, [0] * 26, [0] * 26]
+    
+    masterlist = sorted(masterlist, reverse = True)
+    for j in range(3):
+        if (len(masterlist[j][1]) > 30):
+            finalanswer = masterlist[j][1][:30] + "..."
+        else:
+            finalanswer = masterlist[j][1]
+        finalstring = "Rotor settings: "
+        for m in range(len(masterlist[j][2])):
+            finalstring += chr(ord('A') + int(masterlist[j][2][m]))
+        finalstring += "\nRotor order: "
+        finalstring += str(masterlist[j][3])
+        finalstring += str(masterlist[j][4])
+        finalstring += str(masterlist[j][5]) + "\n"
+        print(finalstring + finalanswer + "\n")
