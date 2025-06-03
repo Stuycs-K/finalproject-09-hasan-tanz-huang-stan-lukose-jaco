@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 char[] letters = new char[9];
-String[] r = {"EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO"};
+String[] r = {"EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO", "ESOVPZJAYQUIRHXLNFTGKDCMWB", "VZBRGITYUPSDNHLXAWMJQOFECK"};
 String reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
-Character[] rollVals={'E', 'V'};
+Character[] rollVals={'Q', 'E', 'V', 'J', 'Z'};
 ArrayList<Integer> reflector = new ArrayList<>();
 String rotors="AAC"; //Make an area to decide the rotor combination
 boolean showSteps = false;
@@ -12,7 +12,11 @@ String output = "";
 ArrayList<key> keys = new ArrayList<>();
 boolean selectingRotor = false;
 int selectedRotorIndex = -1;
-int[] rotorOrder = {3, 2, 1};
+boolean swappingRotor = false;
+int[] rotorIndices = {0, 1, 2};
+int selectedSlot = -1;
+String[] rotorNames = {"I", "II", "III", "IV", "V"};
+
 // Something about reflector, find out later
 class key {
   char letter;
@@ -75,6 +79,22 @@ void changeKey(){
 void keyPressed(){
   textAlign(CENTER, CENTER);
   textSize(24);
+   if (selectedSlot != -1 && swappingRotor == true) {
+     int dir = 0;
+
+    if (keyCode == UP) {
+      dir = -1;
+    } else if (keyCode == DOWN) {
+      dir = 1;
+    }
+
+    if (dir != 0) {
+      int original = rotorIndices[selectedSlot];
+      do {
+        rotorIndices[selectedSlot] = (rotorIndices[selectedSlot] + dir + 5) % 5;
+      } while (isDuplicate(selectedSlot));
+    }
+  }
   if (selectingRotor && selectedRotorIndex != -1) {
     char current = rotors.charAt(selectedRotorIndex);
     if (keyCode == UP) {
@@ -115,6 +135,7 @@ void draw() {
   textAlign(CENTER, CENTER);
   textSize(24);
   drawRotors();
+  drawRotorSelectors();
 //  //drawLetter(letters[0], 200, height/2);
 //  //drawLetter(letters[1], 600, height/2);
 }
@@ -155,22 +176,52 @@ void drawIOBoxes(float pad, float y) {
   text(output, x2+5, y+5, boxWidth-10, boxHeight-10);
 }
 
+void drawRotorSelectors() {
+  for (int i = 0; i < 3; i++) {
+    float x = 360 + i * 80;
+    int y = 265;
+    if (selectedSlot == i) {
+      fill(color(180, 220, 255));
+    }
+    else {
+      fill(200);
+    }
+    rect(x, y, 40, 60);
+    
+    fill(0);
+    textAlign(CENTER, CENTER);
+    text(rotorNames[rotorIndices[i]], x + 20, y + 30);
+  }
+}
+
+
 void mousePressed() {
   for (int i = 0; i < 3; i++) {
     float x = 420 + i*80;
     if (mouseX > x - 20 && mouseX < x+20 && mouseY > 265 && mouseY < 325) {
+      // If I want to change the letter on a rotor
       selectingRotor = true;
       selectedRotorIndex = i;
+      swappingRotor = false;
+      selectedSlot = -1;
       //print(selectingRotor);
       //print(selectedRotorIndex);
       return;
     }
     if (mouseX > x-60 && mouseX < x - 20 && mouseY > 265 && mouseY < 325) {
+      // If I want to change the order of the rotors
+      swappingRotor = true;
+      selectedSlot = i;
+      selectedRotorIndex = -1;
+      selectingRotor = false;
       //Continue with rotor order here
+      return;
     }
    }
   selectingRotor = false;
+  swappingRotor = false;
   selectedRotorIndex = -1;
+  selectedSlot = -1;
   }
   
 
@@ -202,31 +253,41 @@ char c(int num){
   return (char)(num + (int)('A'));
 }
 
+boolean isDuplicate(int slot) {
+  for (int i = 0; i < 3; i++) {
+    if (i != slot && rotorIndices[i] == rotorIndices[slot]) {
+      return true;
+    }
+  }
+  return false;
+}
 char encode(char chr, String plugboard, String rotors) {
   int order = index(chr);
   input += chr;
   // pb function, ignore plugboard
   int pos = 1;
-  for (int i = r.length - 1; i > -1; i--) {
-    //println(index(rotors.charAt(i)));
-    order = index(r[i].charAt(mod26(order + index(rotors.charAt(i))))) - index(rotors.charAt(i));
-    order = mod26(order);
+  for (int j = 2; j >= 0; j--) {
+    int i = rotorIndices[j]; // only use selected rotors
+    int rotorOffset = index(rotors.charAt(j));
+    int shiftedIndex = mod26(order + rotorOffset);
+    char stepped = r[i].charAt(shiftedIndex);
+    order = mod26(index(stepped) - rotorOffset);
     letters[pos] = c(order);
-    pos += 1;
-    //println((char)((int)('A')+order));
+    pos++;
   }
   order = reflector.get(order);
   letters[pos] = c(order);
   pos += 1;
-  for (int i = 0; i < r.length; i ++){
-    //println(index(rotors.charAt(i)));
-    //println((char)((order + index(rotors.charAt(i)) + (int)('A'))));
-    order=r[i].indexOf((char)((order + index(rotors.charAt(i))) %26 + (int)('A')))-index(rotors.charAt(i));
-    order = mod26(order);
+  for (int j = 0; j < 3; j++) {
+    int i = rotorIndices[j]; // only use selected rotors
+    int rotorOffset = index(rotors.charAt(j));
+    int shiftedCharCode = mod26(order + rotorOffset) + 'A';
+    char shiftedChar = (char) shiftedCharCode;
+    int steppedBackIndex = r[i].indexOf(shiftedChar);
+    order = mod26(steppedBackIndex - rotorOffset);
     letters[pos] = c(order);
-    pos += 1;
-    //println((char)((int)('A')+order));
-  }//
+    pos++;
+  }
   letters[pos] = c(order);
   output += letters[letters.length-1];
   return c(order);
@@ -241,10 +302,10 @@ String update(String rotors, boolean reverse) {
     }
     inc = -1;
   }
-  if (rotors.charAt(2) == roll[1]) {
+  if (rotors.charAt(2) == roll[rotorIndices[2]]) {
     rotors = rotors.substring(0,1) + c(mod26(index(rotors.charAt(1))+inc)) + rotors.charAt(2);
     print(rotors);
-    if (rotors.charAt(1) == roll[0]) {
+    if (rotors.charAt(1) == roll[rotorIndices[1]]) {
       rotors = c(mod26(index(rotors.charAt(0))+inc)) + rotors.substring(1);
       print(rotors);
     }
