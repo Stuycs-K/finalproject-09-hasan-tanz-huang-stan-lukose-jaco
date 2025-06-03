@@ -15,5 +15,8 @@ Add key object and simulated light up keyboard.
 Added changeKey() function to declutter and also made visually cleaner.
 
 
-### 2025-05-30 - Delete+backspace+Show Steps
+### 2025-05-31 - Delete+backspace+Show Steps
 Allow deletion of characters and show each step of encryption if desired.
+
+### 2025-05-30 - Implement roll over + undo rolls with backspace
+Add pre-set roll-over values and undo rolls of rotors.
