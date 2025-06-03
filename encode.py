@@ -85,6 +85,9 @@ def parseArgs():
     if (not(number.isnumeric())):
         print("Rotor numbers must be numeric")
         return(None)
+    if (number[0] == number[1] or number[0] == number[2] or number[1] == number[2]):
+        print("Rotor numbers must not repeat")
+        return None
     number = list(number)
     if (len(rotors) != 3):
         print("Rotor settings must have length 3")
@@ -97,13 +100,6 @@ def parseArgs():
     return [plugboard, number, rotors]
 
 def enigma(string):
-    plugboard = arguments[0]
-    rotors = arguments[1]
-    for i in range(len(plugboard)):
-        for j in range(len(plugboard[i])):
-            plugboard[i][j] = index(plugboard[i][j])
-    for i in range(len(rotors)):
-        rotors[i] = index(rotors[i])
     answer = ""
     for i in range(len(string)):
         if ((ord(string[i]) >= ord('A') and ord(string[i]) <= ord('Z')) or (ord(string[i]) >= ord('a') and ord(string[i]) <= ord('z'))):
@@ -112,19 +108,25 @@ def enigma(string):
     return answer
 
 arguments = parseArgs()
-print(arguments)
-for i in range(len(arguments)):
-    r.append(oldr[int(arguments[1][i]) - 1])
-print(r)
-for i in range(len(r)):
-    r[i] = list(r[i])
-    for j in range(len(r[i])):
-        r[i][j] = index(r[i][j])
-        findr[i][r[i][j]] = j
-#print(r)
-if (arguments != None and len(arguments) == 3):
-    with open("orwell.txt", "r") as file:
-        for i in range(1):
-            thing = file.readline()
-            print(len(thing))
-            print(enigma(thing))
+if (arguments is not None):
+    plugboard = arguments[0]
+    rotors = arguments[2]
+    print(plugboard)
+    print(arguments)
+    for i in range(len(arguments)):
+        r.insert(0, oldr[int(arguments[1][i]) - 1])
+    print(r)
+    for i in range(len(r)):
+        r[i] = list(r[i])
+        for j in range(len(r[i])):
+            r[i][j] = index(r[i][j])
+            findr[i][r[i][j]] = j
+    for i in range(len(plugboard)):
+        for j in range(len(plugboard[i])):
+            plugboard[i][j] = index(plugboard[i][j])
+    for i in range(len(rotors)):
+        rotors[i] = index(rotors[i])
+    #print(r)
+    if (arguments != None and len(arguments) == 3):
+        thing = input("Input: ")
+        print(enigma(thing))
