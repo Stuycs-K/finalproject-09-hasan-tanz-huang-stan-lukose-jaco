@@ -1,7 +1,8 @@
 # Dev Log:
 
-This document must be updated daily every time you finish a work session.
+## Jacob Lukose
 
-## Stanley Huang
+### 2025-05-28 - Begin Visualization
+Implemented enigma.py code --> processing so that it is easier to understand and interactive.
 
-### 2025-05-16 - File Setup
+### 2025-05-29 - 
