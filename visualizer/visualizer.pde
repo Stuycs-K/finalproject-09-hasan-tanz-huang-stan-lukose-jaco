@@ -5,7 +5,7 @@ String[] r = {"EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJ
 String reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
 Character[] rollVals={'Q', 'E', 'V', 'J', 'Z'};
 ArrayList<Integer> reflector = new ArrayList<>();
-String rotors="AAC"; //Make an area to decide the rotor combination
+String rotors="AAA"; //Make an area to decide the rotor combination
 boolean showSteps = false;
 String input = "";
 String output = "";
@@ -172,7 +172,6 @@ void drawIOBoxes(float pad, float y) {
   stroke(0);
   rect(x2, y,  boxWidth, boxHeight);
   fill(0);
-  print(1);
   text(output, x2+5, y+5, boxWidth-10, boxHeight-10);
 }
 
@@ -204,8 +203,8 @@ void mousePressed() {
       selectedRotorIndex = i;
       swappingRotor = false;
       selectedSlot = -1;
-      //print(selectingRotor);
-      //print(selectedRotorIndex);
+      ////(selectingRotor);
+      ////(selectedRotorIndex);
       return;
     }
     if (mouseX > x-60 && mouseX < x - 20 && mouseY > 265 && mouseY < 325) {
@@ -304,14 +303,14 @@ String update(String rotors, boolean reverse) {
   }
   if (rotors.charAt(2) == roll[rotorIndices[2]]) {
     rotors = rotors.substring(0,1) + c(mod26(index(rotors.charAt(1))+inc)) + rotors.charAt(2);
-    print(rotors);
+    //(rotors);
     if (rotors.charAt(1) == roll[rotorIndices[1]]) {
       rotors = c(mod26(index(rotors.charAt(0))+inc)) + rotors.substring(1);
-      print(rotors);
+      //(rotors);
     }
   }
   rotors = rotors.substring(0,2) + c(mod26(index(rotors.charAt(2))+inc));
-  print(rotors);
+  //(rotors);
   return rotors;
 }
 
@@ -322,7 +321,7 @@ void steps(boolean show){
   float radius = 30;
   color col = 240; 
   if (show){
-    //print("wtf");
+    ////("wtf");
     for (int i = 0; i < letters.length; i++) {
       float x = padding + i*spacing;
       drawLetter(letters[i], x, y, radius, col);
