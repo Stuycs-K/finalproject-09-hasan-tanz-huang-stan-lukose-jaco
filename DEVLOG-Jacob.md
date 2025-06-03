@@ -10,3 +10,6 @@ Implement keyPressed() function and less bugs
 
 ### 2025-05-30 - Add key object
 Add key object and simulated light up keyboard.
+
+### 2025-05-30 - Streamline previous commit
+Added changeKey() function to declutter and also made visually cleaner.
