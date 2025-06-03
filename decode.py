@@ -1,18 +1,15 @@
 import multiprocessing
 import os
+import sys
 
 def index(char):
     return (ord(char) - ord('A')) % 26
 #setup
-r = ["EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO"]
+oldr = ["EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO", "ESOVPZJAYQUIRHXLNFTGKDCMWB", "VZBRGITYUPSDNHLXAWMJQOFECK"]
+r = []
 findr = [[0] * 26, [0] * 26, [0] * 26]
 reflect = "YRUHQSLDPXNGOKMIEBFZCWVJAT"
 reflector = []
-for i in range(len(r)):
-    r[i] = list(r[i])
-    for j in range(len(r[i])):
-        r[i][j] = index(r[i][j])
-        findr[i][r[i][j]] = j
 for i in range(len(reflect)):
     reflector.append(index(reflect[i]))
 
@@ -73,13 +70,13 @@ def numWords(string1, start):
 
 def e(rotors):
     answer = ""
-    rotors1 = rotors
+    rotors1 = rotors.copy()
     check = []
     for i in range(len(string)):
         update(rotors)
         answer += encode(string[i], rotors)
     #print(answer)
-    return (numWords(answer, 0), answer, rotors)
+    return (numWords(answer, 0), answer, rotors1)
 
 glist = [[i, j, k] for i in range(26) for j in range(26) for k in range(26)]
 #glist = [[0,0,0]]
@@ -87,14 +84,49 @@ def d():
     with multiprocessing.Pool(processes=os.cpu_count()) as pool:
         contents = pool.map(e, glist)
     return contents
-contents = d()
-answer = [thing for thing in contents if thing is not None]
-answer = sorted(answer, reverse = True)
 
-for k in range(1):
+def parseArgs():
+    try:
+        number = sys.argv[1]
+    except IndexError:
+        print("Invalid number of arguments")
+        return None
+    if (len(number) != 3):
+        print("Rotor numbers must have length 3")
+        return None
+    if (not(number.isnumeric())):
+        print("Rotor numbers must be numeric")
+        return(None)
+    if (number[0] == number[1] or number[0] == number[2] or number[1] == number[2]):
+        print("Rotor numbers must not repeat")
+        return None
+    for i in range(len(number)):
+        if (int(number[i]) < 1 or int(number[i]) > 5):
+            print("Rotor numbers must be greater than 0 and less than 6")
+            return None
+    number = list(number)
+    #print(number)
+    return number
+
+arguments = parseArgs()
+if (arguments is not None):
+    #print(arguments)
+    for i in range(len(arguments)):
+        r.insert(0, oldr[int(arguments[i]) - 1])
+    for i in range(len(r)):
+        r[i] = list(r[i])
+        for j in range(len(r[i])):
+            r[i][j] = index(r[i][j])
+            findr[i][r[i][j]] = j
+    #print(r)
+    contents = d()
+    answer = [thing for thing in contents if thing is not None]
+    answer = sorted(answer, reverse = True)
+
     with open("test.txt", "r") as files:
-        for i in range(15):
+        for i in range(1):
             string = files.readline().strip()
+            string = "WXCHWYZBWPGBDEQXOHWFFGVTWBMHOOMJVXXJG"
             contents = d()
             contents = sorted(contents, reverse = True)
             for j in range(3):

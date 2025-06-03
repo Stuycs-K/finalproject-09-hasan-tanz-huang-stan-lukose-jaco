@@ -55,7 +55,6 @@ def update(rotors):
     rotors[2] = mod26(rotors[2] + 1)
 
 def parseArgs():
-    values = []
     try:
         plugboard = sys.argv[1]
         number = sys.argv[2]
@@ -88,6 +87,10 @@ def parseArgs():
     if (number[0] == number[1] or number[0] == number[2] or number[1] == number[2]):
         print("Rotor numbers must not repeat")
         return None
+    for i in range(len(number)):
+        if (int(number[i]) < 1 or int(number[i]) > 5):
+            print("Rotor numbers must be greater than 0 and less than 6")
+            return None
     number = list(number)
     if (len(rotors) != 3):
         print("Rotor settings must have length 3")
@@ -113,7 +116,7 @@ if (arguments is not None):
     rotors = arguments[2]
     print(plugboard)
     print(arguments)
-    for i in range(len(arguments)):
+    for i in range(len(arguments[1])):
         r.insert(0, oldr[int(arguments[1][i]) - 1])
     print(r)
     for i in range(len(r)):
