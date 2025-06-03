@@ -123,18 +123,15 @@ if (arguments is not None):
     answer = [thing for thing in contents if thing is not None]
     answer = sorted(answer, reverse = True)
 
-    with open("test.txt", "r") as files:
-        for i in range(1):
-            string = files.readline().strip()
-            string = "WXCHWYZBWPGBDEQXOHWFFGVTWBMHOOMJVXXJG"
-            contents = d()
-            contents = sorted(contents, reverse = True)
-            for j in range(3):
-                if (len(contents[j][1]) > 30):
-                    finalanswer = contents[j][1][:30] + "..."
-                else:
-                    finalanswer = contents[j][1]
-                finalstring = ""
-                for m in range(len(contents[j][2])):
-                    finalstring += chr(ord('A') + int(contents[j][2][m]))
-                print(finalstring + ": " + finalanswer)
+    string = input("Input: ")
+    contents = d()
+    contents = sorted(contents, reverse = True)
+    for j in range(3):
+        if (len(contents[j][1]) > 30):
+            finalanswer = contents[j][1][:30] + "..."
+        else:
+            finalanswer = contents[j][1]
+        finalstring = ""
+        for m in range(len(contents[j][2])):
+            finalstring += chr(ord('A') + int(contents[j][2][m]))
+        print(finalstring + ": " + finalanswer)
