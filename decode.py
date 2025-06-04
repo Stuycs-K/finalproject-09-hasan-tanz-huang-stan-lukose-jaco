@@ -113,14 +113,25 @@ def parseArgs():
     #print(number)
     return number
 
+def progress(num):
+    string = "["
+    for i in range(num):
+        string += "#"
+    for i in range(60 - num - 1):
+        string += " "
+    number = str(round(float(num / 60) * 100, 2))
+    if (number[-1] == '0'):
+        number += '0'
+    return string + "] " + number + "%"
+
 arguments = parseArgs()
 if (arguments is not None):
     #print(arguments)
     for i in range(len(arguments)):
         r.append(oldr[int(arguments[i]) - 1])
         rollover.append(oldover[int(arguments[i]) - 1])
-    print(r)
-    print(rollover)
+    #print(r)
+    #print(rollover)
     for i in range(len(r)):
         r[i] = list(r[i])
         for j in range(len(r[i])):
@@ -141,14 +152,13 @@ if (arguments is not None):
             finalstring += chr(ord('A') + int(contents[j][2][m]))
         print(finalstring + ": " + finalanswer)
 
-
 if (arguments is None):
     list1 = [1, 2, 3, 4, 5]
     masterlist = []
     perms = list(permutations(list1, 3))
     string = input("Input: ")
     for k in range(len(perms)):
-        #print(k)
+        print('\r' + progress(k), end = '')
         for m in range(len(perms[k])):
             r.append(oldr[int(perms[k][m]) - 1])
             rollover.append(oldover[int(perms[k][m]) - 1])
@@ -163,7 +173,8 @@ if (arguments is None):
         r = []
         rollover = []
         findr = [[0] * 26, [0] * 26, [0] * 26]
-    
+    print('\r' + progress(60))
+    print('')
     masterlist = sorted(masterlist, reverse = True)
     for j in range(3):
         if (len(masterlist[j][1]) > 30):
