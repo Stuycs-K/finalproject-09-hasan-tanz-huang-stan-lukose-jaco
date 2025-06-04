@@ -120,10 +120,10 @@ void keyPressed(){
     steps(showSteps);
   }
   else if(Character.isLetter(chrtr)) {
+    rotors = update(rotors, false);
     letters[0] = chrtr;
     encode(letters[0], "", rotors); //call it directly to set the letters
     changeKey();
-    rotors = update(rotors, false);
     if (showSteps){
       steps(showSteps);
     }
