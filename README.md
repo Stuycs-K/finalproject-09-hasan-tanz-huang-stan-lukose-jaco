@@ -31,6 +31,6 @@ https://brilliant.org/wiki/enigma-machine/
 https://www.cryptomuseum.com/crypto/enigma/wiring.htm
 https://docs.python.org/3/library/multiprocessing.html
 
-### Video:
+### Video (DOE email only):
 
 https://drive.google.com/file/d/1qXprVWVzvXZxy8tcEZBAYClEWdLPLqQB/view?usp=sharing
